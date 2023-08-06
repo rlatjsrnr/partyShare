@@ -62,7 +62,7 @@
 <!-- 계정정보객체, 파티목록 필요, 파티 이미지들 -->
 	<h1>계정 정보</h1>
 	<div id="profileImage">
-		<img src="profileImage.do" ><br/>
+		<img src="profileImage?mNum=${loginMember.MNum}" ><br/>
 		Profile Image
 	</div>
 	
@@ -125,7 +125,7 @@
 				프로필 이미지 설정 <br/> 
 				<img id="preview" /><br/>
 				<input type="file" name="image" onchange="readURL(this);" /> <br/>
-		</div>
+			</div>
 		</div>
 		
 	</form>
