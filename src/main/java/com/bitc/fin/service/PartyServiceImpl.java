@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.bitc.board.util.Criteria;
+import com.bitc.board.util.PageMaker;
 import com.bitc.fin.dao.PartyDAO;
 import com.bitc.fin.vo.PartyVO;
 
@@ -21,13 +23,23 @@ public class PartyServiceImpl implements PartyService {
 	}
 
 	@Override
-	public List<PartyVO> partyList() {
-		return dao.partyList();
+	public List<PartyVO> partyList(Criteria cri) {
+		return dao.partyList(cri);
 	}
 
 	@Override
 	public PartyVO selectParty(int pNum) {
 		return dao.selectParty(pNum);
+	}
+
+	@Override
+	public PageMaker getPageMaker(Criteria cri) {
+		int totalCount = dao.totalCount();
+		PageMaker pm = new PageMaker();
+		pm.setCri(cri);
+		pm.setTotalCount(totalCount);
+		pm.setDisplayPageNum(10);
+		return pm;
 	}
 	
 	

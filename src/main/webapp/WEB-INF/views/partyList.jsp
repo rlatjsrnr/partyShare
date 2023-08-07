@@ -5,53 +5,147 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <title>Insert title here</title>
 <style>
-	.partyContainer{
-		border: 1px black solid;
-		width: 300px;
-		hidght : 400px;
-		text-align: center;
-		display: inline-block;
+	#partyListContainer{
+		width: 80%;
 	}
 
-	td img{
+	#partys{
+		display: flex;
+   		flex-wrap: wrap;
+	}
+	
+	#partys li{
+		list-style:none;
+		padding:10px;
+		border:1px solid #ccc;
+		width: 300px;
+		height:300px;
+		margin: 10px;
+	}
+	
+	#partys li img{
 		width: 200px;
 		height: 200px;
 	}
+	#pagination li{
+		list-style: none;
+		float:left;
+		padding:3px;
+		border:1px solid skyblue;
+		margin: 3px;
+	}
+	#pagination li a{
+		text-decoration: none;
+		color:black;
+	}
+	
+	#pagination li a.active{
+		color:red;
+	}
+	
+
+	
 </style>
 </head>
 <!-- partyList 필요 -->
 <a href="createParty">파티등록</a><br/>
 <hr/>
 <body>
-	<c:choose>
-		<c:when test="${!empty partyList}">
-			<c:forEach var="list" items="${partyList}">
-				<div class="partyContainer">
-					<table>
-						<tr>
-							<td colspan="2"><img src="partyImage?pNum=${list.PNum}"/></td>
-						</tr>
-						<tr>
-							<td>파티명 : </td>
-							<td>${list.PName}</td>
-						</tr>
-						<tr>
-							<td>주소 : </td>
-							<td>${list.sido} ${list.sigungu} ${list.address}</td>
-						</tr>
-						<tr>
-							<td>날짜 : </td>
-							<td>${list.startDate} ~ ${list.endDate}</td>
-						</tr>
-					</table>				
-				</div>
-			</c:forEach>
-		</c:when>
-		<c:otherwise>
+	<div id="partyListContainer">
+		<ul id="partys">
+	
+		</ul>
+	</div>
+	
+	
+	<ul id="pagination">
+	
+	</ul>
+	<script>
+	
+	var page = 1;
+	
+	listPage(page);
+	
+	function listPage(page){
+		let url = "partyList/"+page;
+		$.getJSON(url,function(data){
+			// data == Map
+			// {'list':{}, 'pm' : {}}
+			console.log(data);
+			printList(data.list);
+			printPage(data.pm);
+		});
+	}
+	
+	function printList(list){
+		// #comments
+		let str = "";
+		$(list).each(function(){
+			// PartyVO == this
+			let pName = this.pname;
+			let addr = this.sigungu;
+			let date = this.startDate +"~"+ this.endDate;		
+			let pNum = this.pnum;
+			console.log(pName);
+			console.log(pNum);
+			str += "<li>";
+			str += "<img src='partyImage?pNum="+pNum+"'/><br/>";
+			str += "파티명 : "+pName+"<br/>";
+			str += "주소 : "+addr+"<br/>";
+			str += "날짜 : "+date;
+			str += "</li>";
+		});
+		// $("#comments").html(str);
+		$("#partys").append(str);
+	}
+	
+	function printPage(pm){
+		let str = "";
+		if(pm.prev){
+			str += "<li><a href='"+(pm.startPage-1)+"'> << </a></li>";
+		}
 		
-		</c:otherwise>
-	</c:choose>
+		for(let i = pm.startPage; i<=pm.endPage; i++){
+			if(pm.cri.page == i){
+				str += "<li><a href='"+i+"' class='active'>"+i+"</a></li>";
+			}else{
+				str += "<li><a href='"+i+"'>"+i+"</a></li>";
+			}
+		}
+		
+		if(pm.next){
+			str += "<li><a href='"+(pm.endPage+1)+"'> >> </a></li>";
+		}
+		
+		
+		$("#pagination").html(str);
+	}
+	
+	$("#pagination").on("click", "li a",function(e){
+		e.preventDefault();
+		let commentPage = $(this).attr("href");
+		page = commentPage;
+		listPage(page);
+	});
+	
+	// 무한 페이징
+	$(window).scroll(function(){
+		let dh = $(document).height();
+		let wh = $(window).height();
+		let wt = $(window).scrollTop();
+			
+		if((wt+wh) >= (dh - 10)){
+			if($("#partys li").size() <= 1){
+				return false;
+			}
+			page++;
+			listPage(page);
+		}	
+	});
+	</script>
 </body>
 </html>

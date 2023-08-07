@@ -57,13 +57,21 @@ public class ImageController {
 	@RequestMapping("/profileImage")
 	public ResponseEntity<byte[]> getProfile(HttpServletRequest request) {
 		String mNum = request.getParameter("mNum");
-		
+		MemberVO member = is.selectMember(Integer.parseInt(mNum));
 		ResponseEntity<byte[]> result = null;
 		
 		// 로그인 안했으면 디폴트 이미지 출력
-		if(mNum == null) {
+		if(member.getProfileImage() == null) {
 			String defaultImagePath = request.getServletContext().getRealPath("/resources/img/default.png");
 			File file = new File(defaultImagePath);
+			try {
+				byte[] defaultImage = FileCopyUtils.copyToByteArray(file);
+				member.setProfileImage(defaultImage);
+				member.setProfileImageName("default.png");
+				is.modifyMember(member);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			
 			try {
 				// 헤더에다가 전달하는 파일의 타입을 지정 - MIME타입
