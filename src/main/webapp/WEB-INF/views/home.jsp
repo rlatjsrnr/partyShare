@@ -8,7 +8,7 @@
 </head>
 <body>
 <a href="profileModify">modify</a>
-<a href="partyList">partyList</a>
+<a href="partyList?page=1">partyList</a>
 <form action="login" method="post">
 	<table>
 		<tr>
