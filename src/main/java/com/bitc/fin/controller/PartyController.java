@@ -51,7 +51,7 @@ public class PartyController {
 	@ResponseBody
 	public Map<String, Object> partyList(@PathVariable(name="page") int page){
 		Map<String, Object> map = new HashMap<>();
-		Criteria cri = new Criteria(page, 10);
+		Criteria cri = new Criteria(page, 20);
 		List<PartyVO> partyList = ps.partyList(cri);
 		PageMaker pm = ps.getPageMaker(cri);
 		map.put("pm", pm);

@@ -13,3 +13,7 @@ VALUES ('admin','admin','admin','관리자',30,'F','adminEmail','adminAddr');
 
 INSERT INTO party (pName,host,sido,sigungu,address,startdate,enddate,maincategory)
 VALUES ('testparty',1,'부산','해운대구','내주소','2023-08-06',CURDATE(),'게임');
+
+alter table member modify column profileImageName varchar(256);
+alter table member drop column profileImage;
+desc member;

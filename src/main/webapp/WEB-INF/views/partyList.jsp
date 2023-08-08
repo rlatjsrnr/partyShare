@@ -10,6 +10,7 @@
 <style>
 	#partyListContainer{
 		width: 80%;
+		margin-left: 10%;
 	}
 
 	#partys{
@@ -77,7 +78,7 @@
 			// {'list':{}, 'pm' : {}}
 			console.log(data);
 			printList(data.list);
-			printPage(data.pm);
+			//printPage(data.pm);
 		});
 	}
 	

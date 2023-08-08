@@ -16,6 +16,6 @@ public interface ImageDAO {
 	public MemberVO selectMember(int mNum);
 	
 	// 회원 정보 수정
-	@Update("UPDATE member SET mPw=#{mPw}, mName=#{mName}, mAge=#{mAge}, mGender=#{mGender}, mAddr=#{mAddr}, profileImage=#{profileImage}, profileImageName=#{profileImageName} WHERE mNum=#{mNum}")
+	@Update("UPDATE member SET mPw=#{mPw}, mName=#{mName}, mAge=#{mAge}, mGender=#{mGender}, mAddr=#{mAddr}, profileImageName=#{profileImageName} WHERE mNum=#{mNum}")
 	public int modifyMember(MemberVO member);
 }

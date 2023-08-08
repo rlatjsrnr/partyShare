@@ -3,7 +3,10 @@ package com.bitc.fin.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.UUID;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpHeaders;
@@ -15,9 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.bitc.fin.service.ImageService;
 import com.bitc.fin.service.PartyService;
+import com.bitc.fin.util.FileUtils;
 import com.bitc.fin.vo.MemberVO;
 import com.bitc.fin.vo.PartyVO;
 
@@ -29,6 +34,20 @@ public class ImageController {
 	
 	private final ImageService is;
 	private final PartyService ps;
+	
+	private final String uploadDir;
+	private final ServletContext context;	
+	private String realPath;
+	
+	@PostConstruct
+	public void init() {
+		realPath = context.getRealPath(File.separator+uploadDir);
+		File file = new File(realPath);
+		if(!file.exists()) {
+			file.mkdirs();
+			System.out.println("데렉토리 생성완료");
+		}
+	}
 	
 	@PostMapping("/login")
 	public String login(MemberVO member, HttpServletRequest request) {
@@ -43,15 +62,16 @@ public class ImageController {
 	}
 	
 	@RequestMapping("/modify")
-	public String uploadImage(MemberVO member, HttpServletRequest request, @RequestParam MultipartFile image) {
-		try {
-			member.setUpload(image);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public String uploadImage(MemberVO member, MultipartHttpServletRequest request) throws IOException {
+		MultipartFile file = request.getFile("image");
+		String mNum = request.getParameter("mNum");
+		String savedName = uploadFile(file.getOriginalFilename(), file.getBytes());
+		member.setProfileImageName(savedName);
+		
 		is.modifyMember(member);
 		return "profileModify";
 	}
+	
 	
 	// db에 저장된 이미지 출력
 	@RequestMapping("/profileImage")
@@ -60,13 +80,13 @@ public class ImageController {
 		MemberVO member = is.selectMember(Integer.parseInt(mNum));
 		ResponseEntity<byte[]> result = null;
 		
+		/*
 		// 로그인 안했으면 디폴트 이미지 출력
-		if(member.getProfileImage() == null) {
-			String defaultImagePath = request.getServletContext().getRealPath("/resources/img/default.png");
+		if(member.getProfileImageName() == null) {
+			String savedName = uploadFile("default.png", new File())
 			File file = new File(defaultImagePath);
 			try {
-				byte[] defaultImage = FileCopyUtils.copyToByteArray(file);
-				member.setProfileImage(defaultImage);
+				
 				member.setProfileImageName("default.png");
 				is.modifyMember(member);
 			} catch (IOException e1) {
@@ -82,22 +102,22 @@ public class ImageController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+			*/
 		// 로그인 했으면 db 저장된 회원이미지 가져와서 출력
-		}else {
+		//}else {
+		//}
 			MemberVO m = is.selectMember(Integer.parseInt(mNum));
 			// db에 byte[]타입으로 저장돼있음
-			byte[] profileImage = m.getProfileImage();
 			String path = m.getProfileImageName();
-			File file = new File(path);
+			File file = new File(realPath,path);
 			HttpHeaders header = new HttpHeaders();
 			try {
 				header.add("Content-type", Files.probeContentType(file.toPath()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			result = new ResponseEntity<byte[]>(profileImage, header, HttpStatus.OK);
-		}
+			//result = new ResponseEntity<byte[]>(file., header, HttpStatus.OK);
+		
 		
 		return result;
 	}
@@ -140,5 +160,21 @@ public class ImageController {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 파일 업로드 후 업로드 된 파일 이름 반환
+	 */
+	public String uploadFile(String original, byte[] filedata) throws IOException {
+		String savedName="";
+		UUID uuid = UUID.randomUUID();
+		// 32개의 랜덤한 문자 + 4개의 - 조합으로 총 36개의 문자
+		System.out.println(uuid);
+		savedName = uuid.toString().replace("-", "")+"_"+original;
+		System.out.println(savedName);
+		
+		// spring에서 제공하는 파일 헬퍼 객체
+		FileCopyUtils.copy(filedata, new File(realPath, savedName));
+		return savedName;
 	}
 }
