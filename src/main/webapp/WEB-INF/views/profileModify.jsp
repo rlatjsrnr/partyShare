@@ -46,8 +46,8 @@
 	}
 	#partyListContanier{
 		position: absolute;
-		top: 50%;
-		left: 40%;
+		top: 55%;
+		left: 35%;
 	}
 	#reportBtn{
 		position: absolute;
@@ -56,6 +56,10 @@
 	}
 	table tr th{
 		font-size: 20px;
+	}
+	#partyImg{
+		width: 200px;
+		height: 200px;
 	}
 </style>
 </head>
@@ -72,7 +76,7 @@
 		<input type="hidden" name="mNum" value="${loginMember.MNum}"/>
 		<div id="modifyContainer">
 			<div id="modifyBox">
-				<table>
+				<table border="1">
 					<tr>
 						<th colspan="2">계정 수정</th>
 					</tr>
@@ -133,8 +137,8 @@
 	</form>
 	<div id="partyListContanier">
 		<h2>내가 참여했던 파티 목록</h2>
-		<table>
-			<tr>
+		<table border="1">
+			<tr style="text-align: center;">
 				<td colspan="3">참여 횟수 : ${joinCnt}</td>
 			</tr>
 			<c:choose>
@@ -142,7 +146,7 @@
 					<c:forEach var="list" items="${joinPartyList}">
 						<tr>
 							<td rowspan="3">
-								<img src="upload/party/${list.partyImage1}" />
+								<img id="partyImg" src="upload/party/${list.partyImage1}" />
 							</td>	
 							<td>파티이름 : </td>
 							<td>${list.PName}</td>	

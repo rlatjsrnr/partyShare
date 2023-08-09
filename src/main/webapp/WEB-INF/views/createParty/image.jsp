@@ -9,8 +9,8 @@
 	#imgBox{
 		display:flex;
 		flex-wrap:wrap;
-		width:1500px;
-		height:500px;
+		width:1000px;
+		height:300px;
 	}
 	#imgBox img{
 		border:1px solid black;

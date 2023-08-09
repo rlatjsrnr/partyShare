@@ -14,8 +14,14 @@ VALUES ('admin','admin','admin','관리자',30,'F','adminEmail','adminAddr');
 INSERT INTO party (pName,host,sido,sigungu,address,startdate,enddate,maincategory)
 VALUES ('testparty',1,'부산','해운대구','내주소','2023-08-06',CURDATE(),'게임');
 
+alter table member drop column profileImage;
 alter table member modify column profileImageName varchar(256);
+alter table party modify column partyImage1 varchar(256);
+alter table party modify column partyImage2 varchar(256);
 alter table party modify column partyImage3 varchar(256);
+
+alter table party modify column address varchar(50);
+
 alter table party drop column address;
 desc member;
 desc party;
@@ -46,5 +52,5 @@ desc joinMember;
 INSERT INTO joinMember(pNum, mNum) VALUES(8818, 1); 
 
 SELECT LAST_INSERT_ID();
-
+drop table joinpartylist;
 select * from joinMember;

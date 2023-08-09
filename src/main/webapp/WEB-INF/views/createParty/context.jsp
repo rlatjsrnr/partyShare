@@ -13,7 +13,7 @@
 		<input type="hidden" name="startDate" value="${vo.startDate}" />
 		<input type="hidden" name="endDate" value="${vo.endDate}" />
 		파티 소개<br/>
-		<input type="text" name="pContext" /> <br/>
+		<textarea rows="10" cols="100" name="pContext"></textarea> <br/>
 		<button>다음</button>		
 	</form>
 </body>
