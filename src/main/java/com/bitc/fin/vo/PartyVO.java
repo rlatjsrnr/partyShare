@@ -12,16 +12,15 @@ public class PartyVO {
 	private String sido;
 	private String sigungu;
 	private String address;
-	private Date startDate;
-	private Date endDate;
+	private String startDate;
+	private String endDate;
 	private String pContext;
 	private String mainCategory;
 	private String subCategory;
 	private String finish;
 	private int viewCnt;
-	private byte[] partyImage1;
-	private byte[] partyImage2;
-	private byte[] partyImage3;
+	private String partyImage1;
+	private String partyImage2;
+	private String partyImage3;
 	private String detailAddress;
-	
 }

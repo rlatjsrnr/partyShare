@@ -32,7 +32,10 @@
 	
 	<beans:bean id="uploadDir" class="java.lang.String">
 		<beans:constructor-arg value="upload/profile"/>
-	</beans:bean>	
+	</beans:bean>
+	<beans:bean id="uploadPartyDir" class="java.lang.String">
+		<beans:constructor-arg value="upload/party"/>
+	</beans:bean>		
 
 	
 </beans:beans>

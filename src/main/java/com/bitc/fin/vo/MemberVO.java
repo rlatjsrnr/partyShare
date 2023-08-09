@@ -1,9 +1,5 @@
 package com.bitc.fin.vo;
 
-import java.io.IOException;
-
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

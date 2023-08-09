@@ -13,11 +13,10 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		
 		return "home";
 	}
 	
-	@GetMapping("profileModify")
-	public void profileModify() {}
+	@GetMapping("home")
+	public void toHome() {}
 	
 }

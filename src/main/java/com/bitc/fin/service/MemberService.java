@@ -1,8 +1,11 @@
 package com.bitc.fin.service;
 
-import com.bitc.fin.vo.MemberVO;
+import java.util.List;
 
-public interface ImageService {
+import com.bitc.fin.vo.MemberVO;
+import com.bitc.fin.vo.PartyVO;
+
+public interface MemberService {
 	/**
 	 * @param mNum - 회원번호
 	 * @return 회원 정보
@@ -22,4 +25,15 @@ public interface ImageService {
 	 * 로그인
 	 */
 	public MemberVO login(MemberVO member);
+	
+	/**
+	 * @param mNum - 회원번호로 참여했던 파티 리스트 검색
+	 * @return - 참여 파티 목록
+	 */
+	public List<PartyVO> joinPartyList(int mNum);
+	
+	/**
+	 * 파티 참여 횟수
+	 */
+	public int joinCnt(int mNum);
 }

@@ -24,7 +24,8 @@
 		text-align: center;
 	}
 	#profileImage img{
-		width: 100%;
+		width: 200px;
+		height: 200px;		
 	}
 	
 	#modifyContainer{
@@ -59,10 +60,11 @@
 </style>
 </head>
 <body>
+<a href="home">home으로</a>
 <!-- 계정정보객체, 파티목록 필요, 파티 이미지들 -->
 	<h1>계정 정보</h1>
 	<div id="profileImage">
-		<img src="profileImage?mNum=${loginMember.MNum}" ><br/>
+		<img src="upload/profile/${loginMember.profileImageName}" ><br/>
 		Profile Image
 	</div>
 	
@@ -133,21 +135,21 @@
 		<h2>내가 참여했던 파티 목록</h2>
 		<table>
 			<tr>
-				<td colspan="3">참여 횟수 : </td>
+				<td colspan="3">참여 횟수 : ${joinCnt}</td>
 			</tr>
 			<c:choose>
-				<c:when test="${!empty attendPartyList}">
-					<c:forEach var="list" items="${attendPartyList}">
+				<c:when test="${!empty joinPartyList}">
+					<c:forEach var="list" items="${joinPartyList}">
 						<tr>
 							<td rowspan="3">
-								<img id="partyImg" />
+								<img src="upload/party/${list.partyImage1}" />
 							</td>	
 							<td>파티이름 : </td>
-							<td></td>	
+							<td>${list.PName}</td>	
 						</tr>
 						<tr>
 							<td>파티날짜 : </td>
-							<td></td>
+							<td>${list.startDate} ~ ${list.endDate}</td>
 						</tr>
 						<tr>
 							<td>파티장소 : </td>

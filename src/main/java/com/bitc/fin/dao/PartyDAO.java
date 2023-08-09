@@ -1,6 +1,7 @@
 package com.bitc.fin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
@@ -9,9 +10,12 @@ import com.bitc.board.util.Criteria;
 import com.bitc.fin.vo.PartyVO;
 
 public interface PartyDAO {
-	@Insert("INSERT INTO party(pName, host, sido, sigungu, address, startDate, endDate, pContext, mainCategory, subCategory, partyImage1) "
-			+ "VALUES(#{pName}, #{host}, #{sido}, #{sigungu}, #{address}, now(), now(), #{pContext}, #{mainCategory}, #{subCategory}, #{partyImage1})")
+	@Insert("INSERT INTO party(pName, host, startDate, endDate, pContext, mainCategory, subCategory, partyImage1,partyImage2,partyImage3) "
+			+ "VALUES(#{pName}, #{host}, #{startDate},#{endDate}, #{pContext}, #{mainCategory}, #{subCategory}, #{partyImage1},#{partyImage2},#{partyImage3})")
 	public int createParty(PartyVO vo);
+	
+	@Select("SELECT LAST_INSERT_ID()")
+	public int lastIndex();
 	
 	@Select("SELECT * FROM party ORDER BY pNum DESC limit #{startRow}, #{perPageNum}")
 	public List<PartyVO> partyList(Criteria cri);
@@ -21,4 +25,7 @@ public interface PartyDAO {
 	
 	@Select("SELECT count(*) FROM party")
 	public int totalCount();
+	
+	@Insert("INSERT INTO joinMember(pNum, mNum) VALUES(#{pNum}, #{mNum})")
+	public int joinPartyMember(Map<String, Integer> map);
 }

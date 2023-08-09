@@ -1,6 +1,8 @@
 package com.bitc.fin.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -18,10 +20,19 @@ public class PartyServiceImpl implements PartyService {
 	private final PartyDAO dao;
 	
 	@Override
-	public void createParty(PartyVO vo) {
+	public int createParty(PartyVO vo) {
 		dao.createParty(vo);
+		return dao.lastIndex();
 	}
 
+	@Override
+	public void joinPartyMember(int pNum, int mNum) {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("pNum", pNum);
+		map.put("mNum", mNum);
+		dao.joinPartyMember(map);
+	}
+	
 	@Override
 	public List<PartyVO> partyList(Criteria cri) {
 		return dao.partyList(cri);
@@ -41,6 +52,10 @@ public class PartyServiceImpl implements PartyService {
 		pm.setDisplayPageNum(10);
 		return pm;
 	}
+
+
+
+	
 	
 	
 }

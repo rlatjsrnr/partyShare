@@ -8,7 +8,9 @@ import com.bitc.fin.vo.PartyVO;
 
 public interface PartyService {
 	
-	public void createParty(PartyVO vo);
+	public int createParty(PartyVO vo);
+	
+	public void joinPartyMember(int pNum, int mNum);
 	
 	public List<PartyVO> partyList(Criteria cri);
 	

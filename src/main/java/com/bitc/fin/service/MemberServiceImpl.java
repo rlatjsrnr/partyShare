@@ -1,17 +1,20 @@
 package com.bitc.fin.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import com.bitc.fin.dao.ImageDAO;
+import com.bitc.fin.dao.MemberDAO;
 import com.bitc.fin.vo.MemberVO;
+import com.bitc.fin.vo.PartyVO;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ImageServiceImpl implements ImageService {
+public class MemberServiceImpl implements MemberService {
 
-	private final ImageDAO dao;
+	private final MemberDAO dao;
 	
 	@Override
 	public MemberVO login(MemberVO member) {
@@ -27,6 +30,16 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	public void modifyMember(MemberVO member) {
 		dao.modifyMember(member);
+	}
+
+	@Override
+	public List<PartyVO> joinPartyList(int mNum) {
+		return dao.joinPartyList(mNum);
+	}
+
+	@Override
+	public int joinCnt(int mNum) {
+		return dao.joinCnt(mNum);
 	}
 
 	

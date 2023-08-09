@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="realPath" value="${pageContext.request.contextPath}/upload/party/"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,7 +53,8 @@
 </style>
 </head>
 <!-- partyList 필요 -->
-<a href="createParty">파티등록</a><br/>
+<a href="createName">파티등록</a><br/>
+<a href="home">홈으로</a>
 <hr/>
 <body>
 	<div id="partyListContainer">
@@ -91,10 +93,13 @@
 			let addr = this.sigungu;
 			let date = this.startDate +"~"+ this.endDate;		
 			let pNum = this.pnum;
+			let path = this.partyImage1;
+			
 			console.log(pName);
 			console.log(pNum);
+			console.log(path);
 			str += "<li>";
-			str += "<img src='partyImage?pNum="+pNum+"'/><br/>";
+			str += "<img src='upload/party/"+path+"'/><br/>";
 			str += "파티명 : "+pName+"<br/>";
 			str += "주소 : "+addr+"<br/>";
 			str += "날짜 : "+date;
