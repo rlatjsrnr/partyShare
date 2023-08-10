@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Service;
 
 import com.bitc.board.util.Criteria;
@@ -53,6 +55,16 @@ public class PartyServiceImpl implements PartyService {
 		return pm;
 	}
 
+	@Override
+	public void makeAddress(HttpServletRequest request, PartyVO vo) {
+		String[] jibun = request.getParameter("jibunAddress").split(" ");
+		String detailAddress = request.getParameter("detailAddress");
+		vo.setSido(jibun[0]);
+		vo.setSigungu(jibun[1]);
+		vo.setDetailAddress(detailAddress);
+	}
+
+	
 
 
 	

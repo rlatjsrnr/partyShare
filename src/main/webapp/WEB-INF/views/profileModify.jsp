@@ -130,7 +130,7 @@
 			<div id="modifyImgBox">
 				프로필 이미지 설정 <br/> 
 				<img id="preview" /><br/>
-				<input type="file" name="image" onchange="readURL(this);" /> <br/>
+				<input type="file" name="image" onchange="readURL(this);" accept=".gif, .jpg, .jpeg, .png"/> <br/>
 			</div>
 		</div>
 		

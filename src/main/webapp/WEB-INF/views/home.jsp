@@ -9,6 +9,7 @@
 <body>
 <a href="profileModify">modify</a>
 <a href="partyList">partyList</a>
+<a href="address">address</a>
 <form action="login" method="post">
 	<table>
 		<tr>

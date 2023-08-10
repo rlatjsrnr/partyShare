@@ -19,7 +19,8 @@ alter table member modify column profileImageName varchar(256);
 alter table party modify column partyImage1 varchar(256);
 alter table party modify column partyImage2 varchar(256);
 alter table party modify column partyImage3 varchar(256);
-
+delete from joinMember;
+delete from party;
 alter table party modify column address varchar(50);
 
 alter table party drop column address;
