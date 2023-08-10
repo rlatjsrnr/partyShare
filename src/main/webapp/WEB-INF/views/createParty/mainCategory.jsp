@@ -66,7 +66,7 @@
 		<input type="hidden" name="startDate" value="${vo.startDate}" />
 		<input type="hidden" name="endDate" value="${vo.endDate}" />
 		<input type="hidden" name="pContext" value="${vo.PContext}" />
-		<input type="hidden" id="main" name="mainCategory"/> <br/>
+		<input type="hidden" id="main" name="mainCategory" required/> <br/>
 		<button id="submit">다음</button>
 	</form>
 	

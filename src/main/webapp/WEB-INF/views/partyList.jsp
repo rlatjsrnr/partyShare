@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
 <title>Insert title here</title>
 <style>
 	#partyListContainer{
@@ -90,18 +91,18 @@
 		$(list).each(function(){
 			// PartyVO == this
 			let pName = this.pname;
-			let addr = this.sigungu;
+			let address = this.address;
 			let date = this.startDate +"~"+ this.endDate;		
 			let pNum = this.pnum;
 			let path = this.partyImage1;
-			
+			let detailAddress = this.detailAddress;
 			console.log(pName);
 			console.log(pNum);
 			console.log(path);
 			str += "<li>";
 			str += "<img src='upload/party/"+path+"'/><br/>";
 			str += "파티명 : "+pName+"<br/>";
-			str += "주소 : "+addr+"<br/>";
+			str += "주소 : "+address+" "+detailAddress+"<br/>";
 			str += "날짜 : "+date;
 			str += "</li>";
 		});

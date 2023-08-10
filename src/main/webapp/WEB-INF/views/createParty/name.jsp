@@ -9,7 +9,7 @@
 <body>
 	<form action="createName" method="post">
 		<input type="hidden" name="host" value="${loginMember.MNum}"/>
-		파티이름 : <input type="text" name="pName"/><br/>
+		파티이름 : <input type="text" name="pName" required/><br/>
 		<button>다음</button>
 	</form>
 </body>

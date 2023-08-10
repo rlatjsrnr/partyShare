@@ -10,8 +10,8 @@ import com.bitc.board.util.Criteria;
 import com.bitc.fin.vo.PartyVO;
 
 public interface PartyDAO {
-	@Insert("INSERT INTO party(pName, host, startDate, endDate, pContext, mainCategory, subCategory, partyImage1,partyImage2,partyImage3) "
-			+ "VALUES(#{pName}, #{host}, #{startDate},#{endDate}, #{pContext}, #{mainCategory}, #{subCategory}, #{partyImage1},#{partyImage2},#{partyImage3})")
+	@Insert("INSERT INTO party(pName, host, startDate, endDate, pContext, mainCategory, subCategory, sido, sigungu, address, detailAddress, partyImage1,partyImage2,partyImage3) "
+			+ "VALUES(#{pName}, #{host}, #{startDate},#{endDate}, #{pContext}, #{mainCategory}, #{subCategory}, #{sido},#{sigungu}, #{address}, #{detailAddress}, #{partyImage1},#{partyImage2},#{partyImage3})")
 	public int createParty(PartyVO vo);
 	
 	@Select("SELECT LAST_INSERT_ID()")

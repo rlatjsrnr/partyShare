@@ -82,42 +82,42 @@
 					</tr>
 					<tr>
 						<td>아이디</td>
-						<td><input type="text" name="mId" value="${loginMember.MId}"/></td>
+						<td><input type="text" name="mId" value="${loginMember.MId}" readonly/></td>
 					
 					</tr>
 					<tr>
 						<td>비밀번호</td>
-						<td><input type="password" name="mPw" value="${loginMember.MPw}"/></td>
+						<td><input type="password" name="mPw" value="${loginMember.MPw}" required/></td>
 					</tr>
 					<tr>
 						<td>비밀번호 확인</td>
-						<td><input type="password" name="passwordChk" value="${loginMember.MPw}"/></td>
+						<td><input type="password" name="passwordChk" value="${loginMember.MPw}" required/></td>
 					</tr>
 					<tr>
 						<td>이름</td>
-						<td><input type="text" name="mName" value="${loginMember.MName}"/></td>
+						<td><input type="text" name="mName" value="${loginMember.MName}" required/></td>
 					</tr>
 					<tr>
 						<td>닉네임</td>
-						<td><input type="text" name="mNick" value="${loginMember.MNick}"/></td>
+						<td><input type="text" name="mNick" value="${loginMember.MNick}" required/></td>
 					</tr>
 					<tr>
 						<td>나이</td>
-						<td><input type="number" name="mAge" value="${loginMember.MAge}"/></td>
+						<td><input type="number" name="mAge" value="${loginMember.MAge}" required/></td>
 					</tr>
 					<tr>
 						<td>email</td>
-						<td><input type="email" name="mEmail" value="${loginMember.MEmail}"/></td>
+						<td><input type="email" name="mEmail" value="${loginMember.MEmail}" required/></td>
 					</tr>
 					<tr>
 						<td>주소</td>
-						<td><input type="text" name="mAddr" value="${loginMember.MAddr}"/></td>
+						<td><input type="text" name="mAddr" value="${loginMember.MAddr}" required/></td>
 					</tr>
 					<tr>
 						<td>성별</td>
 						<td>
-							<input type="radio" name="mGender" value="M"/>남자
-							<input type="radio" name="mGender" value="F"/>여자
+							<input type="radio" name="mGender" value="M" required />남자
+							<input type="radio" name="mGender" value="F" required />여자
 						</td>
 					</tr>
 					<tr>
@@ -130,7 +130,7 @@
 			<div id="modifyImgBox">
 				프로필 이미지 설정 <br/> 
 				<img id="preview" /><br/>
-				<input type="file" name="image" onchange="readURL(this);" /> <br/>
+				<input type="file" name="image" onchange="readURL(this);" accept=".gif, .jpg, .jpeg, .png"/> <br/>
 			</div>
 		</div>
 		
@@ -157,7 +157,7 @@
 						</tr>
 						<tr>
 							<td>파티장소 : </td>
-							<td></td>
+							<td>${list.address} ${list.detailAddress}</td>
 						</tr>
 					</c:forEach>
 				</c:when>

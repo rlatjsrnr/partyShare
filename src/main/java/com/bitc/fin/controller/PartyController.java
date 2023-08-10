@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -81,6 +82,17 @@ public class PartyController {
 	public String createSubCategory(PartyVO vo, Model model) {
 		System.out.println(vo);
 		model.addAttribute("vo", vo);
+		return "createParty/address";
+	}
+	
+	@PostMapping("createAddress")
+	public String createSubAddress(PartyVO vo, Model model, HttpServletRequest request) {
+		ps.makeAddress(request, vo);
+		System.out.println(vo);
+		
+		
+		model.addAttribute("vo", vo);
+		
 		return "createParty/image";
 	}
 	
