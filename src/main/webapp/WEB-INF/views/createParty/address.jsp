@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style>
-	#address,#jibunAddress {
+	#roadAddress,#jibunAddress {
 		width:350px;
 	}
 </style>
@@ -20,10 +20,10 @@
 		<input type="hidden" name="startDate" value="${vo.startDate}" />
 		<input type="hidden" name="endDate" value="${vo.endDate}" />
 		<input type="hidden" name="pContext" value="${vo.PContext}" />
-		<input type="hidden" name="mainCategory" value="${vo.mainCategory}" />
-		<input type="hidden" id="sub" name="subCategory" />
+		<input type="hidden" name="description" value="${vo.description}" />
+		<input type="hidden" id="sub" name="category" value="${vo.category}"/>
 		
-		<input type="text" id="address" name="address" placeholder="도로명주소" required/>
+		<input type="text" id="roadAddress" name="address" placeholder="도로명주소" required/>
 		<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br/>
 		<input type="text" id="jibunAddress" name="jibunAddress" placeholder="지번주소" required /><br/>
 		<span id="guide" style="color:#999;display:none"></span>
@@ -42,7 +42,7 @@
 
                 // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
                 // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                var roadAddr = data.address; // 도로명 주소 변수
+                var roadAddr = data.roadAddress; // 도로명 주소 변수
                 var extraRoadAddr = ''; // 참고 항목 변수
 
                 // 법정동명이 있을 경우 추가한다. (법정리는 제외)
@@ -60,7 +60,7 @@
                 }
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById("address").value = roadAddr;
+                document.getElementById("roadAddress").value = roadAddr;
                 document.getElementById("jibunAddress").value = data.jibunAddress;
                 
                 // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.

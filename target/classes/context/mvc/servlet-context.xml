@@ -3,10 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd
+		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
-
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+		
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
@@ -21,11 +25,10 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.bitc.fin.controller" />
-	
 	<!-- 파일업로드 설정 -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="maxUploadSize" value="10485760"/> <!-- 10MB - 최대 크기 default : 무제한 -->
+		<!-- <beans:property name="maxUploadSize" value="10485760"/> 10MB - 최대 크기 default : 무제한 -->
+		<beans:property name="maxUploadSize" value="31457280"/>
 		<beans:property name="maxInMemorySize" value="10240"/> <!-- 10KB - 한 번에 가져올 데이터 양 default : 10KB -->
 		<beans:property name="defaultEncoding" value="UTF-8"/> <!-- file 외의 파라미터 인코딩 -->
 	</beans:bean>
@@ -35,7 +38,19 @@
 	</beans:bean>
 	<beans:bean id="uploadPartyDir" class="java.lang.String">
 		<beans:constructor-arg value="upload/party"/>
-	</beans:bean>		
-
+	</beans:bean>	
+	
+	<websocket:handlers>
+		<websocket:mapping handler="echoHandler" path="/echo" />
+		<websocket:sockjs />
+	</websocket:handlers>
+    
+	<beans:bean id="echoHandler" class="com.bitc.fin.chat.EchoHandler"/>
+	
+	<aop:aspectj-autoproxy />
+	<context:component-scan base-package="com.bitc.fin.aop" />
+		
+	<context:component-scan base-package="com.bitc.fin.controller" />
+	<context:component-scan base-package="com.bitc.fin.service"/>
 	
 </beans:beans>

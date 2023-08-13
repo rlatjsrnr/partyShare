@@ -3,7 +3,6 @@ package com.bitc.fin.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.bitc.fin.service.MemberService;
 import com.bitc.fin.service.PartyService;
+import com.bitc.fin.util.FileUtils;
 import com.bitc.fin.vo.MemberVO;
 import com.bitc.fin.vo.PartyVO;
 
@@ -52,7 +51,7 @@ public class MemberController {
 		MemberVO m = ms.login(member);
 		if(m.getMName() != null) {
 			request.getSession().setAttribute("loginMember", m);
-			return "redirect:/profileModify";
+			return "redirect:/home";
 		}else {
 			return "home";
 		}
@@ -70,14 +69,31 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/modify")
-	public String modifyMember(MemberVO member, MultipartHttpServletRequest request,Model model) throws IOException {
+	public String modifyMember(MemberVO member, MultipartHttpServletRequest request,Model model) {
 		MultipartFile file = request.getFile("image");
 		String mNum = request.getParameter("mNum");
-		String savedName = uploadFile(file.getOriginalFilename(), file.getBytes());
-		member.setProfileImageName(savedName);
-		ms.modifyMember(member);
 		MemberVO m = ms.selectMember(Integer.parseInt(mNum));
+
+		String oldProfileImageName = m.getProfileImageName();
+		String savedName = null;
+
+		try {
+			// 원래 프로필 이미지 삭제가 되면 새로운 이미지 업로드
+			if(oldProfileImageName != null) {
+				if(FileUtils.deleteOriginalImage(realPath, oldProfileImageName)) {
+					savedName = FileUtils.uploadOriginalImage(realPath, file);
+				}
+			}else {
+				savedName = FileUtils.uploadOriginalImage(realPath, file);
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
+		m.setProfileImageName(savedName);
+		ms.modifyMember(m);
 		model.addAttribute("loginMember", m);
 
 		// 참여 파티 목록
@@ -88,19 +104,4 @@ public class MemberController {
 		return "profileModify";
 	}
 	
-	/**
-	 * 파일 업로드 후 업로드 된 파일 이름 반환
-	 */
-	public String uploadFile(String original, byte[] filedata) throws IOException {
-		String savedName="";
-		UUID uuid = UUID.randomUUID();
-		// 32개의 랜덤한 문자 + 4개의 - 조합으로 총 36개의 문자
-		System.out.println(uuid);
-		savedName = uuid.toString().replace("-", "")+"_"+original;
-		System.out.println(savedName);
-		
-		// spring에서 제공하는 파일 헬퍼 객체
-		FileCopyUtils.copy(filedata, new File(realPath, savedName));
-		return savedName;
-	}
 }

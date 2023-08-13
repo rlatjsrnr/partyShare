@@ -49,11 +49,7 @@
 		top: 55%;
 		left: 35%;
 	}
-	#reportBtn{
-		position: absolute;
-		bottom:10%;
-		left:45%;
-	}
+	
 	table tr th{
 		font-size: 20px;
 	}
@@ -130,13 +126,13 @@
 			<div id="modifyImgBox">
 				프로필 이미지 설정 <br/> 
 				<img id="preview" /><br/>
-				<input type="file" name="image" onchange="readURL(this);" accept=".gif, .jpg, .jpeg, .png"/> <br/>
+				<input type="file" name="image" id="image" onchange="readURL(this);" accept=".gif, .jpg, .jpeg, .png"/> <br/>
 			</div>
 		</div>
 		
 	</form>
 	<div id="partyListContanier">
-		<h2>내가 참여했던 파티 목록</h2>
+		<h2 style="text-align: center;">내가 참여했던 파티 목록</h2>
 		<table border="1">
 			<tr style="text-align: center;">
 				<td colspan="3">참여 횟수 : ${joinCnt}</td>
@@ -153,13 +149,16 @@
 						</tr>
 						<tr>
 							<td>파티날짜 : </td>
-							<td>${list.startDate} ~ ${list.endDate}</td>
+							<td>${list.formatStartDate} ~ ${list.formatEndDate}</td>
 						</tr>
 						<tr>
 							<td>파티장소 : </td>
 							<td>${list.address} ${list.detailAddress}</td>
 						</tr>
 					</c:forEach>
+						<tr>
+							<td colspan="3" style="text-align: center;"><a href="" id="reportBtn">신고하기</a></td>
+						</tr>
 				</c:when>
 				<c:otherwise>
 					<tr>
@@ -171,7 +170,7 @@
 	</div>
 	
 
-	<a href="" id="reportBtn">신고하기</a>	
+		
 	
 
 <script>

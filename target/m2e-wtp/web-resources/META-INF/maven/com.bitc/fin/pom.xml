@@ -219,6 +219,23 @@
 		    <version>4.2</version>
 		</dependency>
 		
+		<!-- annotation 기반 AOP -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjtools</artifactId>
+			<version>${org.aspectj-version}</version>
+		</dependency>
+		
+		<!-- webSocket -->
+		<dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-websocket</artifactId>
+	        <version>${org.springframework-version}</version>
+	    </dependency>
+	    
+	    
+	    
+	    
 	</dependencies>
     <build>
         <plugins>

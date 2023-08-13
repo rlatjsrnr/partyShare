@@ -18,9 +18,4 @@ public class HomeController {
 	
 	@GetMapping("home")
 	public void toHome() {}
-	
-	@GetMapping("address")
-	public String toAddress() {
-		return "/createParty/address";
-	}
 }
