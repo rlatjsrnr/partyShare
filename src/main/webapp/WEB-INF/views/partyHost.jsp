@@ -24,15 +24,15 @@
 		<c:if test="${!empty partyJoinMember}">
 			<c:forEach var="list" items="${partyJoinMember}">
 				<tr>
-					<td><img src="upload/profile/${list.profileImageName}"/></td>
+					<td><img src="printPartyImage?fileName=${list.profileImageName}"/></td>
 					<td style="width: 200px;">${list.MName}</td>
-					<td><a href="partyMemberBan?mNum=${list.MNum}&pNum=7662">강퇴</a></td>
+					<td><a href="partyMemberBan?mNum=${list.MNum}&pNum=7669">강퇴</a></td>
 				</tr>
 			</c:forEach>
 		</c:if>
 	</table>
 	<div>
-		<h1><a href="partyFinish?pNum=7662">파티종료</a></h1>
+		<h1><a href="partyFinish?pNum=7669">파티종료</a></h1>
 	</div>
 </body>
 </html>

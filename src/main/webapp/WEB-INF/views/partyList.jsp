@@ -33,6 +33,7 @@
 	#partys li .partyImg{
 		width: 200px;
 		height: 200px;
+		cursor: pointer;
 	}
 	#partys li .likeBtn{
 		width: 40px;
@@ -40,22 +41,7 @@
 		position: relative;
 		left: 290px;
 		bottom: 150px;
-	}
-	
-	#pagination li{
-		list-style: none;
-		float:left;
-		padding:3px;
-		border:1px solid skyblue;
-		margin: 3px;
-	}
-	#pagination li a{
-		text-decoration: none;
-		color:black;
-	}
-	
-	#pagination li a.active{
-		color:red;
+		cursor: pointer;
 	}
 	
 	#mapBtn{
@@ -86,19 +72,13 @@
 	<a href="#">지도보기</a>
 </div>
 <hr/>
-
-
 	<div id="partyListContainer">
 		
 		<ul id="partys">
 		
 		</ul>
 	</div>
-	
-	
-	<ul id="pagination">
-	
-	</ul>
+
 	<script>
 	
 	var page = 1;
@@ -108,32 +88,24 @@
 	function listPage(page){
 		let url = "partyList/"+page;
 		$.getJSON(url,function(data){
-			// data == Map
-			// {'list':{}, 'pm' : {}}
-			console.log(data);
 			printList(data.list);
-			//printPage(data.pm);
 		});
 	}
 	
 	function printList(list){
-		// #comments
 		let str = "";
 		$(list).each(function(){
-			// PartyVO == this
 			let pName = this.pname;
 			let address = this.address;
 			let date = this.formatStartDate +"~"+ this.formatEndDate;		
 			let pNum = this.pnum;
 			let path = this.partyImage1;
 			let detailAddress = this.detailAddress;
-			console.log(pName);
-			console.log(pNum);
-			console.log(path);
+			
 			str += "<li>";
 			// wishList 받아서 fullHeart.png로 출력
 			str += "<img src='resources/img/emptyHeart.png' class='likeBtn'/>"
-			str += "<img src='upload/party/"+path+"' class='partyImg'/><br/>";
+			str += "<img src='printPartyImage?fileName="+path+"' class='partyImg' onclick='partyDetail("+pNum+");' /><br/>";
 			str += "파티명 : "+pName+"<br/>";
 			str += "주소 : "+address+" "+detailAddress+"<br/>";
 			str += "날짜 : "+date;
@@ -141,6 +113,11 @@
 		});
 		$("#partys").append(str);
 	}
+	
+	function partyDetail(pNum){
+		location.href="partyDetail?pNum="+pNum;
+	}
+	
 	// wishList
 	$("#partys").on("click", "li .likeBtn", function(){
 		let likeImg = $(this).attr("src");
@@ -151,6 +128,22 @@
 		}
 	});
 	
+	// 무한 페이징
+	$(window).scroll(function(){
+		let dh = $(document).height();
+		let wh = $(window).height();
+		let wt = $(window).scrollTop();
+			
+		if((wt+wh) >= (dh - 10)){
+			if($("#partys li").size() <= 1){
+				return false;
+			}
+			page++;
+			listPage(page);
+		}	
+	});
+	
+	/*
 	function printPage(pm){
 		let str = "";
 		if(pm.prev){
@@ -172,28 +165,16 @@
 		
 		$("#pagination").html(str);
 	}
-	
+	*/
+	/*
 	$("#pagination").on("click", "li a",function(e){
 		e.preventDefault();
 		let commentPage = $(this).attr("href");
 		page = commentPage;
 		listPage(page);
 	});
+	*/
 	
-	// 무한 페이징
-	$(window).scroll(function(){
-		let dh = $(document).height();
-		let wh = $(window).height();
-		let wt = $(window).scrollTop();
-			
-		if((wt+wh) >= (dh - 10)){
-			if($("#partys li").size() <= 1){
-				return false;
-			}
-			page++;
-			listPage(page);
-		}	
-	});
 	</script>
 </body>
 </html>

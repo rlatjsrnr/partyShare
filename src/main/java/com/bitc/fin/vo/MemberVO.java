@@ -1,6 +1,7 @@
 package com.bitc.fin.vo;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,4 +33,17 @@ public class MemberVO {
 		this.mPw = mPw;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof MemberVO) {
+			MemberVO m = (MemberVO) obj;
+			if(this.mNum == m.mNum) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	
+	
 }

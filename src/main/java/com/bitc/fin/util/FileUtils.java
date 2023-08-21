@@ -115,6 +115,7 @@ public class FileUtils {
 		name = thumbnailImage.substring(realPath.length()).replace(File.separatorChar, '/');
 		return name;
 	}
+	
 	public static String calcPath(String realPath) {
 		String pattern = File.separator+"yyyy"+File.separator+"MM"+File.separator+"dd";
 		LocalDate date = LocalDate.now();

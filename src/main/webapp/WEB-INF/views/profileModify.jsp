@@ -64,12 +64,18 @@
 <!-- 계정정보객체, 파티목록 필요, 파티 이미지들 -->
 	<h1>계정 정보</h1>
 	<div id="profileImage">
-		<img src="upload/profile/${loginMember.profileImageName}" ><br/>
+		<img src="printProfileImage?fileName=${loginMember.profileImageName}" ><br/>
 		Profile Image
 	</div>
 	
 	<form action="modify" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="mNum" value="${loginMember.MNum}"/>
+		<input type="hidden" name="mBanCnt" value="${loginMember.MBanCnt}"/>
+		<input type="hidden" name="mJoinCnt" value="${loginMember.MJoinCnt}"/>
+		<input type="hidden" name="mBlackYN" value="${loginMember.MBlackYN}"/>
+		<input type="hidden" name="withdraw" value="${loginMember.withdraw}"/>
+		<input type="hidden" name="profileImageName" value="${loginMember.profileImageName}"/>
+	
 		<div id="modifyContainer">
 			<div id="modifyBox">
 				<table border="1">
@@ -95,7 +101,7 @@
 					</tr>
 					<tr>
 						<td>닉네임</td>
-						<td><input type="text" name="mNick" value="${loginMember.MNick}" required/></td>
+						<td><input type="text" name="mNick" value="${loginMember.MNick}" readonly/></td>
 					</tr>
 					<tr>
 						<td>나이</td>
@@ -103,7 +109,7 @@
 					</tr>
 					<tr>
 						<td>email</td>
-						<td><input type="email" name="mEmail" value="${loginMember.MEmail}" required/></td>
+						<td><input type="email" name="mEmail" value="${loginMember.MEmail}" readonly/></td>
 					</tr>
 					<tr>
 						<td>주소</td>
@@ -129,7 +135,6 @@
 				<input type="file" name="image" id="image" onchange="readURL(this);" accept=".gif, .jpg, .jpeg, .png"/> <br/>
 			</div>
 		</div>
-		
 	</form>
 	<div id="partyListContanier">
 		<h2 style="text-align: center;">내가 참여했던 파티 목록</h2>
@@ -140,18 +145,18 @@
 			<c:choose>
 				<c:when test="${!empty joinPartyList}">
 					<c:forEach var="list" items="${joinPartyList}">
-						<tr>
+						<tr onclick="partyDetail(${list.PNum});" style="cursor:pointer;">
 							<td rowspan="3">
-								<img id="partyImg" src="upload/party/${list.partyImage1}" />
+								<img id="partyImg" src="printPartyImage?fileName=${list.partyImage1}" />
 							</td>	
 							<td>파티이름 : </td>
 							<td>${list.PName}</td>	
 						</tr>
-						<tr>
+						<tr onclick="partyDetail(${list.PNum});" style="cursor:pointer;">
 							<td>파티날짜 : </td>
 							<td>${list.formatStartDate} ~ ${list.formatEndDate}</td>
 						</tr>
-						<tr>
+						<tr onclick="partyDetail(${list.PNum});" style="cursor:pointer;">
 							<td>파티장소 : </td>
 							<td>${list.address} ${list.detailAddress}</td>
 						</tr>
@@ -184,6 +189,10 @@
 	  } else {
 	    document.getElementById('preview').src = "";
 	  }
+	}
+	
+	function partyDetail(pNum){
+		location.href='partyDetail?pNum='+pNum;
 	}
 </script>
 </body>

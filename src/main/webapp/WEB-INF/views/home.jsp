@@ -9,8 +9,7 @@
 <body>
 <a href="profileModify">modify</a>
 <a href="partyList">partyList</a>
-<a href="partyHost?pNum=7662">partyMemberList</a>
-<a href="chat">chat</a>
+<a href="partyHost?pNum=7669">partyMemberList</a>
 <form action="login" method="post">
 	<table>
 		<tr>

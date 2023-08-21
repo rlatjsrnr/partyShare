@@ -40,17 +40,16 @@
 		<beans:constructor-arg value="upload/party"/>
 	</beans:bean>	
 	
-	<websocket:handlers>
-		<websocket:mapping handler="echoHandler" path="/echo" />
+	<!-- allowed-origins="*" -->
+	<websocket:handlers allowed-origins="http://">
+		<websocket:mapping handler="echoHandler" path="/echo"/>
 		<websocket:sockjs />
-	</websocket:handlers>
-    
+	</websocket:handlers> 
+		
 	<beans:bean id="echoHandler" class="com.bitc.fin.chat.EchoHandler"/>
 	
 	<aop:aspectj-autoproxy />
 	<context:component-scan base-package="com.bitc.fin.aop" />
-		
 	<context:component-scan base-package="com.bitc.fin.controller" />
-	<context:component-scan base-package="com.bitc.fin.service"/>
 	
 </beans:beans>

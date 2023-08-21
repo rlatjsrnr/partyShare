@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bitc.board.util.Criteria;
 import com.bitc.board.util.PageMaker;
 import com.bitc.fin.dao.PartyDAO;
+import com.bitc.fin.vo.MapVO;
 import com.bitc.fin.vo.MemberVO;
 import com.bitc.fin.vo.PartyVO;
 
@@ -25,14 +26,14 @@ public class PartyServiceImpl implements PartyService {
 	
 	@Transactional
 	@Override
-	public int createParty(PartyVO vo) {
+	public int createParty(PartyVO vo) throws Exception{
 		dao.createParty(vo);
 		int result = dao.lastIndex();
 		return result;
 	}
 	
 	@Override
-	public void joinPartyMember(int pNum, int mNum) {
+	public void joinPartyMember(int pNum, int mNum) throws Exception{
 		Map<String, Integer> map = new HashMap<>();
 		map.put("pNum", pNum);
 		map.put("mNum", mNum);
@@ -40,17 +41,17 @@ public class PartyServiceImpl implements PartyService {
 	}
 	
 	@Override
-	public List<PartyVO> partyList(Criteria cri) {
+	public List<PartyVO> partyList(Criteria cri) throws Exception{
 		return dao.partyList(cri);
 	}
 
 	@Override
-	public PartyVO selectParty(int pNum) {
+	public PartyVO selectParty(int pNum) throws Exception{
 		return dao.selectParty(pNum);
 	}
 
 	@Override
-	public PageMaker getPageMaker(Criteria cri) {
+	public PageMaker getPageMaker(Criteria cri) throws Exception{
 		int totalCount = dao.totalCount();
 		PageMaker pm = new PageMaker();
 		pm.setCri(cri);
@@ -60,37 +61,27 @@ public class PartyServiceImpl implements PartyService {
 	}
 
 	@Override
-	public void makeAddress(HttpServletRequest request, PartyVO vo) {
-		String[] jibun = request.getParameter("jibunAddress").split(" ");
-		String detailAddress = request.getParameter("detailAddress");
-		vo.setSido(jibun[0]);
-		vo.setSigungu(jibun[1]);
-		vo.setDetailAddress(detailAddress);
-	}
-
-	@Override
-	public List<String> getDescriptionList() {
-		System.out.println(dao.getDescriptionList());
+	public List<String> getDescriptionList() throws Exception{
 		return dao.getDescriptionList();
 	}
 
 	@Override
-	public List<String> getCategoryList() {
-		System.out.println(dao.getCategoryList());
+	public List<String> getCategoryList() throws Exception{
 		return dao.getCategoryList();
 	}
 
 	@Override
-	public List<MemberVO> getJoinPartyMemberList(int pNum) {
+	public List<MemberVO> getJoinPartyMemberList(int pNum) throws Exception{
 		return dao.getJoinPartyMember(pNum);
 	}
 
 	@Override
-	public String partyMemberBan(int pNum, int mNum) {
+	public String partyMemberBan(int pNum, int mNum) throws Exception{
 		Map<String, Integer> map = new HashMap<>();
 		map.put("pNum", pNum);
 		map.put("mNum", mNum);
 		if(dao.partyMemberBan(map) > 0) {
+			dao.insertBanMember(map);
 			return "삭제 성공";
 		}else {
 			return "삭제 실패";
@@ -98,12 +89,18 @@ public class PartyServiceImpl implements PartyService {
 	}
 
 	@Override
-	public String setPartyFinish(int pNum) {
+	public String setPartyFinish(int pNum) throws Exception{
 		if(dao.setPartyFinish(pNum) > 0) {
+			dao.setPartyChatFinish(pNum);
 			return "파티 종료";
 		}else {
 			return "파티 종료 실패";
 		}
+	}
+
+	@Override
+	public void setLocation(MapVO map) throws Exception {
+		dao.setLocation(map);
 	}
 
 	

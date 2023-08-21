@@ -48,7 +48,7 @@
 		<input type="hidden" name="pName" value="${vo.PName}" />
 		<input type="hidden" name="startDate" value="${vo.startDate}" />
 		<input type="hidden" name="endDate" value="${vo.endDate}" />
-		<input type="hidden" name="pContext" value="${vo.PContext}" />
+		<input type="hidden" name="pContext" value='${vo.PContext}' />
 		<input type="text" id="description" name="description" required/> <br/>
 		<button id="submit">다음</button>
 	</form>

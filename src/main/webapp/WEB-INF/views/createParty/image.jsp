@@ -30,11 +30,13 @@
 		<input type="hidden" name="endDate" value="${vo.endDate}" />
 		<input type="hidden" name="description" value="${vo.description}" />
 		<input type="hidden" name="category" value="${vo.category}" />
-		<input type="hidden" name="pContext" value="${vo.PContext}" />
-		<input type="hidden" name="address" value="${vo.address}"><br/>
-		<input type="hidden" name="sido" value="${vo.sido}"><br/>
-		<input type="hidden" name="sigungu" value="${vo.sigungu}"><br/>
-		<input type="hidden" name="detailAddress" value="${vo.detailAddress}"><br/>
+		<input type="hidden" name="pContext" value='${vo.PContext}' />
+		<input type="hidden" name="address" value="${vo.address}">
+		<input type="hidden" name="sido" value="${vo.sido}">
+		<input type="hidden" name="sigungu" value="${vo.sigungu}">
+		<input type="hidden" name="detailAddress" value="${vo.detailAddress}">
+		<input type="hidden" id="lat" name="lat" value="${mapVO.lat}">
+    	<input type="hidden" id="lng" name="lng" value="${mapVO.lng}">
 		파티 이미지 등록 <br/>
 		<div id="imgBox">
 			<img class="preview" /><br/>
@@ -50,7 +52,6 @@
 	<script>
 	function readURL(input) {
 		let previews = document.querySelectorAll(".preview");
-		console.log(previews);
 		  if (input.files && input.files[0]) {
 		    var reader = new FileReader();
 		    reader.onload = function(e) {
@@ -65,11 +66,11 @@
 		    reader.readAsDataURL(input.files[0]);
 		  } else {
 			  if(input.id == 'imgInput1'){
-		    	  previews[0].src = e.target.result;	  
+		    	  previews[0].src = "";	  
 		      }else if(input.id == 'imgInput2'){
-		    	  previews[1].src = e.target.result;
+		    	  previews[1].src = "";
 		      }else{
-		    	  previews[2].src = e.target.result;
+		    	  previews[2].src = "";
 		      }
 		  }
 		}

@@ -1,7 +1,6 @@
 package com.bitc.fin.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -9,13 +8,20 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bitc.fin.service.MemberService;
 import com.bitc.fin.service.PartyService;
@@ -48,7 +54,12 @@ public class MemberController {
 	
 	@PostMapping("/login")
 	public String login(MemberVO member, HttpServletRequest request) {
-		MemberVO m = ms.login(member);
+		MemberVO m = null;
+		try {
+			m = ms.login(member);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if(m.getMName() != null) {
 			request.getSession().setAttribute("loginMember", m);
 			return "redirect:/home";
@@ -62,8 +73,14 @@ public class MemberController {
 	public void profileModify(Model model, HttpSession session) {
 		// 참여했던 파티 목록 필요
 		MemberVO member = (MemberVO) session.getAttribute("loginMember");
-		List<PartyVO> list = ms.joinPartyList(member.getMNum());
-		int joinCnt = ms.joinCnt(member.getMNum());
+		List<PartyVO> list = null;
+		int joinCnt = 0;
+		try {
+			list = ms.joinPartyList(member.getMNum());
+			joinCnt = ms.joinCnt(member.getMNum());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		model.addAttribute("joinCnt", joinCnt);
 		model.addAttribute("joinPartyList", list);
 	}
@@ -71,37 +88,39 @@ public class MemberController {
 	@RequestMapping("/modify")
 	public String modifyMember(MemberVO member, MultipartHttpServletRequest request,Model model) {
 		MultipartFile file = request.getFile("image");
-		String mNum = request.getParameter("mNum");
-		MemberVO m = ms.selectMember(Integer.parseInt(mNum));
+		
+		if(!file.isEmpty()) {
+			String oldProfileImageName = member.getProfileImageName();
+			String savedName = null;
 
-		String oldProfileImageName = m.getProfileImageName();
-		String savedName = null;
-
-		try {
-			// 원래 프로필 이미지 삭제가 되면 새로운 이미지 업로드
-			if(oldProfileImageName != null) {
-				if(FileUtils.deleteOriginalImage(realPath, oldProfileImageName)) {
+			try {
+				// 원래 프로필 이미지 삭제가 되면 새로운 이미지 업로드
+				if(!oldProfileImageName.trim().equals("")) {
+					if(FileUtils.deleteOriginalImage(realPath, oldProfileImageName)) {
+						savedName = FileUtils.uploadOriginalImage(realPath, file);
+					}
+				}else {
 					savedName = FileUtils.uploadOriginalImage(realPath, file);
 				}
-			}else {
-				savedName = FileUtils.uploadOriginalImage(realPath, file);
+				member.setProfileImageName(savedName);
+				ms.modifyMember(member);
+				request.getSession().setAttribute("loginMember", member);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		
-		m.setProfileImageName(savedName);
-		ms.modifyMember(m);
-		model.addAttribute("loginMember", m);
 
-		// 참여 파티 목록
-		List<PartyVO> list = ms.joinPartyList(m.getMNum());
-		int joinCnt = ms.joinCnt(m.getMNum());
-		model.addAttribute("joinCnt", joinCnt);
-		model.addAttribute("joinPartyList", list);
-		return "profileModify";
+		return "redirect:profileModify";
+	}
+		
+	@GetMapping("printProfileImage")
+	public ResponseEntity<byte[]> uploadFile(String fileName) throws Exception{
+		return new ResponseEntity<>(
+				FileUtils.getBytes(realPath, fileName),
+				FileUtils.getHeaders(fileName),
+				HttpStatus.OK
+				);
 	}
 	
 }

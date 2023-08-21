@@ -1,44 +1,66 @@
 package com.bitc.fin.chat;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+import com.bitc.fin.service.ChatService;
+import com.bitc.fin.vo.ChatVO;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequestMapping("/echo")
 public class EchoHandler extends TextWebSocketHandler{
-    //세션 리스트
-    private List<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
 
-    //클라이언트가 연결 되었을 때 실행
-    @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        sessionList.add(session);
-        log.info("{} 연결됨", session.getId()); 
-    }
+	private static List<WebSocketSession> sessionList = new ArrayList<>();
 
-    //클라이언트가 웹소켓 서버로 메시지를 전송했을 때 실행
-    @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        log.info("{}로 부터 {} 받음", session.getId(), message.getPayload());
-        //모든 유저에게 메세지 출력
-        for(WebSocketSession sess : sessionList){
-            sess.sendMessage(new TextMessage(message.getPayload()));
-        }
-    }
-    //클라이언트 연결을 끊었을 때 실행
-    @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        sessionList.remove(session);
-        log.info("{} 연결 끊김.", session.getId());
-    }
+	@Autowired
+	ChatService cs;
+	
+	@Override
+	public void afterConnectionEstablished(WebSocketSession session){
+		log.info("연결됨");
+		sessionList.add(session);
+	}
+
+	@Override
+	protected void handleTextMessage(WebSocketSession session, TextMessage message) {
+		
+		String msg = message.getPayload().replace("\"", "");
+		String[] strs = msg.split(",");
+		String pNum = strs[0].substring(strs[0].indexOf(":")+1);
+		String mNum = strs[1].substring(strs[1].indexOf(":")+1);
+		String content = strs[2].substring(strs[2].indexOf(":")+1, strs[2].length()-1);
+		
+		ChatVO chat = new ChatVO(Integer.parseInt(pNum), Integer.parseInt(mNum), content);
+		try {
+			cs.insertChat(chat);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		for(WebSocketSession sess : sessionList) {
+			try {
+				sess.sendMessage(new TextMessage(message.getPayload()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+		sessionList.remove(session);
+	}
 }
-

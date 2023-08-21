@@ -2,7 +2,7 @@
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-<filter>
+	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
 		<init-param>
@@ -36,7 +36,8 @@
 			<param-value>classpath:/context/mvc/servlet-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
-		
+<!-- 		<async-supported>true</async-supported>
+ -->		
 		<!-- 이미지 전송 설정 -->
 		<multipart-config>
 		 	<location>C:\\upload</location>

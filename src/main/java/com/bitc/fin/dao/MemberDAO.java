@@ -12,19 +12,19 @@ public interface MemberDAO {
 	
 	// 로그인
 	@Select("SELECT * FROM member WHERE mId=#{mId} AND mPw=#{mPw}")
-	public MemberVO login(MemberVO member);
+	public MemberVO login(MemberVO member) throws Exception;
 	
 	// 회원 번호로 회원 정보 검색 
 	@Select("select * from member where mNum=#{mNum}")
-	public MemberVO selectMember(int mNum);
+	public MemberVO selectMember(int mNum) throws Exception;
 	
 	// 회원 정보 수정
-	@Update("UPDATE member SET mPw=#{mPw}, mName=#{mName}, mAge=#{mAge}, mEmail=#{mEmail}, mGender=#{mGender}, mAddr=#{mAddr}, profileImageName=#{profileImageName} WHERE mNum=#{mNum}")
-	public int modifyMember(MemberVO member);
+	@Update("UPDATE member SET mPw=#{mPw}, mName=#{mName}, mAge=#{mAge}, mGender=#{mGender}, mAddr=#{mAddr}, profileImageName=#{profileImageName} WHERE mNum=#{mNum}")
+	public int modifyMember(MemberVO member) throws Exception;
 	
 	@Select("SELECT * FROM party WHERE pNum IN (SELECT pNum FROM joinMember WHERE mNum=#{mNum})")
-	public List<PartyVO> joinPartyList(int mNum);
+	public List<PartyVO> joinPartyList(int mNum) throws Exception;
 	
 	@Select("SELECT count(*) FROM joinMember WHERE mNum=#{mNum}")
-	public int joinCnt(int mNum);
+	public int joinCnt(int mNum) throws Exception; 
 }

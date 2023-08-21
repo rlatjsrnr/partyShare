@@ -17,28 +17,28 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberDAO dao;
 	
 	@Override
-	public MemberVO login(MemberVO member) {
+	public MemberVO login(MemberVO member) throws Exception {
 		return dao.login(member);
 	}
 	
 	@Override
-	public MemberVO selectMember(int mNum) {
+	public MemberVO selectMember(int mNum) throws Exception{
 		MemberVO member= dao.selectMember(mNum);
 		return member;
 	}
 
 	@Override
-	public void modifyMember(MemberVO member) {
+	public void modifyMember(MemberVO member) throws Exception{
 		dao.modifyMember(member);
 	}
 
 	@Override
-	public List<PartyVO> joinPartyList(int mNum) {
+	public List<PartyVO> joinPartyList(int mNum) throws Exception{
 		return dao.joinPartyList(mNum);
 	}
 
 	@Override
-	public int joinCnt(int mNum) {
+	public int joinCnt(int mNum) throws Exception{
 		return dao.joinCnt(mNum);
 	}
 
