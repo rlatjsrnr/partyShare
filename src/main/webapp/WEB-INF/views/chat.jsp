@@ -7,20 +7,22 @@
 <head>
 <meta charset="UTF-8">
 <title>home</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 <style>
 	#chat_container{
-		width : 450px;
-		background-color:skyblue;
+		width : 45%;
 		font-size: 20px;
-		position: relative;
-		left:20%;
-		top:70px;
 		border-radius: 20px;
+		border:1px solid lightgrey;
+		box-shadow: 1px 1px 1px;
+		float:left;
+		margin-top: 5%;
+		margin-left: 5%;
 	}
 	
 	.chatcontent {
-		height: 500px;
-		width : 450px;
+		height: 700px;
+		width : 95%;
 		overflow-y: scroll;
 	}
 	
@@ -35,12 +37,14 @@
 		width:75%;
 		resize: none;
 		margin-left:5%;
+		border-radius: 10px;
 			
 	}
 	.send{
-		height:50px;
+		height:100px;
+		width:100px;
 		position: relative;
-		bottom: 20px;
+		bottom: 41px;
 		
 	}
 	
@@ -97,11 +101,11 @@
 	
 	#partyInfoContainer{
 		width : 500px;
-		background-color:skyblue;
-		position: relative;
-		left:50%;
-		bottom:500px;
-		
+		height: 700px;
+		background-color:white;
+		float:left;
+		margin-left: 5%;
+		margin-top: 5%;
 	}
 	#partyInfoContainer img{
 		text-align:center;
@@ -118,10 +122,11 @@
 </style>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.5/sockjs.min.js"></script>
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
 <a href="<c:url value='/home'/>">home으로</a>
-<a href="<c:url value='/party/partyList'/>">List화면으로 이동</a>
+<a href="<c:url value='/party/partyList'/>">List화면으로 이동</a><br/>
 <div id="chat_container">
 	<div class="chatWrap">
 		<div class="content chatcontent">
@@ -142,7 +147,7 @@
 						<li id="otherChat" data-no="${chat.cnum}">
 							<c:forEach var="joinMember" items="${joinMemberList}">
 								<c:if test="${chat.mnum eq joinMember.mnum}">
-									<img src="<c:url value='/image/printProfileImage?fileName=${joinMember.profileImageName}'/>" /><span>${joinMember.MNick}</span>
+									<img src="<c:url value='/image/printProfileImage?fileName=${joinMember.profileImageName}'/>" /><span>${joinMember.mnick}</span>
 								</c:if>
 							</c:forEach>
 							<div>
@@ -156,15 +161,15 @@
 		<div class="chat-fixK">
 			<div class="fix_btn">
 				<textarea name="msg" id="msgi" rows="3"></textarea>
-				<button type="button" id="sendBtn" class="send">보내기</button>
+				<button type="button" id="sendBtn" class="send btn btn-outline-dark">보내기</button>
 			</div>
 		</div>
 	</div>
 </div>
 <div id="partyInfoContainer">
-	<table border="1">
+	<table class="table table-bordered border-black">
 		<tr>
-			<th colspan="2">
+			<th colspan="2" style="text-align: center;">
 				<img src="<c:url value='/image/printPartyImage?fileName=${fn:replace(party.partyImage1, "s_", "")}'/>"/>
 			</th>
 		</tr>
@@ -189,7 +194,6 @@
 </body>
 <script type="text/javascript">
 	var contextPath = '${pageContext.request.contextPath}';
-	var client;
 	function moveDown(){
 		$(".chatcontent").scrollTop($(".chatcontent")[0].scrollHeight);
 	}
@@ -209,7 +213,6 @@
 			}
 
 			var endNo = $("#chatList li").first().data("no");
-			console.log("endNo : " + endNo);
 			$.ajax({
 				url : contextPath+"/chatList?endNo="+endNo+"&pnum=${party.pnum}",
 				type : "GET",
@@ -272,8 +275,17 @@
 		
 		$(function() {
 			var messageInput = $('textarea[name="msg"]');
-			var sock = new SockJS("echo");
-
+			let sockAddr = 'echo/${pnum}';
+			var sock = new SockJS(sockAddr);
+			sock.onopen = function(){
+				sock.send(JSON.stringify({
+					puum : "${party.pnum}",
+					muum : "${loginMember.mnum}",
+					content : "ENTER",
+					path : "${loginMember.profileImageName}",
+					nick : "${loginMember.mnick}"
+				})); 
+			};
 			sock.onmessage = onMessage;
 			sock.onclose = onClose;
 			
@@ -282,6 +294,7 @@
 				if (message == "") {
 					return false;
 				}
+			
 				sock.send(JSON.stringify({
 					puum : "${party.pnum}",
 					muum : "${loginMember.mnum}",

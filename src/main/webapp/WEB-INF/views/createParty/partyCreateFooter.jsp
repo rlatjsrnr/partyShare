@@ -28,7 +28,12 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 	$("#nextBtn").click(function(){
-		$("form").submit();
+		let value = $(".reqInput").val();
+		if(value != ''){
+			$("form").submit();	
+		}else{
+			alert('선택해주세요');
+		}
 	});
 	$("#prevBtn").click(function(){
 		history.go(-1);

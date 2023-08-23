@@ -10,8 +10,8 @@
 	#successBox{
 		text-align: center;
 		width: 500px;
-		margin-left:30%;
-		margin-top:10%;
+		margin-left:35%;
+		margin-top:15%;
 	}
 	#successBox a{
 		display:inline-block;

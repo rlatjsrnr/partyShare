@@ -13,8 +13,11 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	<!-- 지정된 위치의 properties파일을 read하는 class -->
-	<context:property-placeholder location="classpath:prop/*.properties"/>
+	<!-- <context:property-placeholder location="classpath:prop/*.properties"/> -->
 	
+	<context:property-placeholder location="classpath:prop/db.properties"/>   
+	<!-- <context:property-placeholder location="classpath:prop/maria.properties"/> -->   
+	<context:property-placeholder location="classpath:prop/api.properties"/>   
 	<!-- Hikari 설정 정보 class -->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="driverClassName" value="${jdbc.log4j.driver}" />

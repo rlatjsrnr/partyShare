@@ -2,8 +2,6 @@ package com.bitc.fin.party.controller;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +10,11 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -105,9 +100,12 @@ public class PartyController {
 	}
 	
 	@PostMapping("/choosePeriod")
-	public String choosePeriod(PartyVO vo, Model model, MapVO map) {
-		
-		
+	public String choosePeriod(PartyVO vo, Model model, MapVO map, String period) {
+		if(period.equals("짜릿한 일회성 만남")) {
+			
+		}else {
+			
+		}
 		model.addAttribute(map);
 		model.addAttribute("vo", vo);
 		return "createParty/date";
@@ -146,7 +144,6 @@ public class PartyController {
 		MultipartFile file3 = request.getFile("image3");
 		System.out.println(file1);
 		String savedName = "";
-		
 		try {
 			if(!file1.isEmpty()) {
 				savedName = FileUtils.uploadThumbnailImage(realPath, file1);
@@ -216,6 +213,7 @@ public class PartyController {
 		try {
 			list = ps.getJoinPartyMemberList(pnum);
 			model.addAttribute("partyJoinMember",list);
+			model.addAttribute("pnum", pnum);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -223,16 +221,15 @@ public class PartyController {
 	}
 	
 	@GetMapping("/partyMemberBan")
-	public String partyMemberBan(Model model, int mnum, int pnum) {
+	public String partyMemberBan(Model model, int mnum, int pnum, RedirectAttributes rttr) {
 		try {
 			String result = ps.partyMemberBan(pnum, mnum);
 			model.addAttribute("message", result);
-			List<MemberVO> list = ps.getJoinPartyMemberList(pnum);
-			model.addAttribute("partyJoinMember", list);
+			rttr.addAttribute("pnum", pnum);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "partyHost";
+		return "redirect:/party/partyHost";
 	}
 	
 	@GetMapping("/partyFinish")

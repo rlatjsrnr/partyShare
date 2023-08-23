@@ -105,13 +105,9 @@
 	
 	<form action="createDescription" method="post">
 		<input type="hidden" name="host" value="${loginMember.mnum}"/>
-		<input type="text" id="description" name="description" required/> <br/>
+		<input type="text" id="description" class="reqInput" name="description" required/> <br/>
 	</form>
 	
-	<div id="footerDiv">
-		<button type="button" id="prevBtn" class="btn btn-dark">이전</button>
-		<button type="button" id="nextBtn" class="btn btn-dark">다음</button>
-	</div>
 <script>
 	ScrollReveal().reveal('.widget', { interval: 200 });
 	const divs = document.querySelectorAll(".widget");
@@ -125,18 +121,8 @@
 		e.target.style.backgroundColor = "#FF385C";
 	}
 	
-	$("#nextBtn").click(function(){
-		let value = $("#description").val();
-		if(value != ''){
-			$("form").submit();	
-		}else{
-			alert('선택해주세요');
-		}
-	});
-	$("#prevBtn").click(function(){
-		history.go(-1);
-	});
+	
 </script>
-
+<%@ include file="partyCreateFooter.jsp" %>
 </body>
 </html>

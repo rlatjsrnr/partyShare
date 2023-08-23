@@ -45,12 +45,12 @@
 		<form action="createAddress" method="post">
 			<input type="hidden" name="host" value="${loginMember.mnum}"/>
 			<input type="hidden" name="description" value="${vo.description}" />
-			<input type="hidden" id="sub" name="category" value="${vo.category}"/>
+			<input type="hidden" name="category" value="${vo.category}"/>
 			
 			<input type="text" id="postcode" placeholder="우편번호">
 			<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
 			<input type="text" name="address" id="address" placeholder="주소"><br>
-			<input type="text" name="detailAddress" id="detailAddress" placeholder="상세주소">
+			<input type="text" name="detailAddress" id="detailAddress" class="reqInput" placeholder="상세주소">
 			<input type="text" id="extraAddress" placeholder="참고항목">
 			<input type="hidden" id="sido" name="sido"/>
 			<input type="hidden" id="sigungu" name="sigungu"/>

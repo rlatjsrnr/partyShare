@@ -10,7 +10,7 @@
 <body>
 <a href="<c:url value='/member/profileModify?page=1'/>">modify</a>
 <a href="<c:url value='/party/partyList'/>">partyList</a>
-<a href="<c:url value='/party/partyHost?pnum=7679'/>">partyMemberList</a>
+<a href="<c:url value='/party/partyHost?pnum=496'/>">partyMemberList</a>
 <form action="member/login" method="post">
 	<table>
 		<tr>

@@ -28,7 +28,7 @@
 			<input type="hidden" name="detailAddress" value="${vo.detailAddress}">
 			<input type="hidden" id="lat" name="lat" value="${mapVO.lat}">
 	    	<input type="hidden" id="lng" name="lng" value="${mapVO.lng}">
-			시작날짜 : <input type="date" name="startDate" required/>	~	끝 날짜 : <input type="date" name="endDate" required/> <br/>
+			시작날짜 : <input type="date" name="startDate" class="reqInput" required/>	~	끝 날짜 : <input type="date" name="endDate" required/> <br/>
 		</form>
 	</div>
 	

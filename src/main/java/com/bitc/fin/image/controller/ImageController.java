@@ -1,15 +1,25 @@
 package com.bitc.fin.image.controller;
 
 import java.io.File;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bitc.fin.member.service.MemberService;
 import com.bitc.fin.member.vo.MemberVO;
@@ -68,11 +78,36 @@ public class ImageController {
 		}
 		
 		@GetMapping("/printPartyImage")
-		public ResponseEntity<byte[]> uploadFile(String fileName) throws Exception{
+		public ResponseEntity<byte[]> printPartyImage(String fileName) throws Exception{
 			return new ResponseEntity<>(
 					FileUtils.getBytes(partyRealPath, fileName),
 					FileUtils.getHeaders(fileName),
 					HttpStatus.OK
 					);
+		}
+		
+		
+		@PostMapping("uploadAjax")
+		@ResponseBody
+		public ResponseEntity<String> uploadAjax(MultipartFile file) throws Exception{
+			String savedName = FileUtils.uploadOriginalImage(profileRealPath, file);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Type", "text/plain;charset=utf-8");
+			return new ResponseEntity<>(savedName, headers, HttpStatus.OK);
+		}
+
+		@DeleteMapping(value="deleteFile", produces="text/plain;charset=utf-8")
+		@ResponseBody
+		public ResponseEntity<String> deleteFile(@RequestBody String fileName) throws Exception{
+			ResponseEntity<String> entity = null;
+			System.out.println(fileName);
+			boolean isDeleted = FileUtils.deleteOriginalImage(profileRealPath, fileName);
+			
+			if(isDeleted) {
+				entity = new ResponseEntity<>("삭제성공",HttpStatus.OK);
+			}else {
+				entity = new ResponseEntity<>("삭제실패",HttpStatus.CREATED);
+			}
+			return entity;
 		}
 }

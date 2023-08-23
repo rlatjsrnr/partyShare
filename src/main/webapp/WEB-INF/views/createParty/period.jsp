@@ -45,22 +45,6 @@
 	html.sr .widget {
 	  visibility: hidden;
 	}
-	
-	#footerDiv{
-		margin:0;
-		padding:0;
-		width: 100%;
-		display: flex;
-		justify-content: space-between;
-		height:100px;
-		position: fixed;
-		bottom: 0;
-		border-top: 2px black solid;
-		padding:20px;
-	}
-	#footerDiv button{
-		width: 150px;
-	}
 	#period{
 		visibility: hidden;
 	}
@@ -86,12 +70,8 @@
 		<input type="hidden" name="detailAddress" value="${vo.detailAddress}">
 		<input type="hidden" id="lat" name="lat" value="${mapVO.lat}">
     	<input type="hidden" id="lng" name="lng" value="${mapVO.lng}">
-    	<input type="text" id="period" name="period" />
+    	<input type="text" id="period" name="period" class="reqInput" required/>
 	</form>
-	<div id="footerDiv">
-		<button type="button" id="prevBtn" class="btn btn-dark">이전</button>
-		<button type="button" id="nextBtn" class="btn btn-dark">다음</button>
-	</div>
 <script>
 	ScrollReveal().reveal('.widget', { interval: 200 });
 	const divs = document.querySelectorAll(".widget");
@@ -105,18 +85,7 @@
 		e.target.style.backgroundColor = "#FF385C";
 	}
 	
-	$("#nextBtn").click(function(){
-		let value = $("#period").val();
-		if(value != ''){
-			$("form").submit();	
-		}else{
-			alert('선택해주세요');
-		}
-	});
-	$("#prevBtn").click(function(){
-		history.go(-1);
-	});
 </script>
-
+<%@ include file="partyCreateFooter.jsp" %>
 </body>
 </html>

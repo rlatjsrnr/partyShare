@@ -9,7 +9,7 @@
 <meta charset="UTF-8">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 <title>Insert title here</title>
 <style>
 
@@ -27,22 +27,24 @@
 		list-style:none;
 		padding:10px;
 		border:1px solid #ccc;
+		box-shadow:1px 1px 1px;
+		border-radius: 10px;
 		width: 350px;
 		height:300px;
 		margin: 10px;
 	}
 	
 	#partys li .partyImg{
-		width: 200px;
-		height: 200px;
+		width: 180px;
+		height: 180px;
 		cursor: pointer;
 	}
 	#partys li .likeBtn{
 		width: 40px;
 		height: 40px;
 		position: relative;
-		left: 290px;
-		bottom: 150px;
+		left: 270px;
+		bottom: 70px;
 		cursor: pointer;
 	}
 	
@@ -106,14 +108,15 @@
 			let pnum = this.pnum;
 			let path = this.partyImage1;
 			let detailAddress = this.detailAddress;
-			
-			str += '<li>';
+
+			str += '<li class="border border-3">';
 			// wishList 받아서 fullHeart.png로 출력
 			str += "<img src='"+contextPath+"/resources/img/emptyHeart.png' class='likeBtn'/>"
-			str += "<img src='"+contextPath+"/image/printPartyImage?fileName="+path+"' class='partyImg' onclick='partyDetail("+pnum+");' /><br/>";
-			str += "파티명 : "+pname+"<br/>";
-			str += "주소 : "+address+" "+detailAddress+"<br/>";
-			str += "날짜 : "+date;
+			str += '<img src="'+contextPath+'/image/printPartyImage?fileName='+path+'" class="partyImg" onclick="partyDetail('+pnum+');">';
+			str += "<hr/>";
+			str += "<strong onclick='partyDetail("+pnum+");'>"+pname+"</strong><br/>";
+			str += address+" "+detailAddress+"<br/>";
+			str += date;
 			str += "</li>";
 		});
 		$("#partys").append(str);

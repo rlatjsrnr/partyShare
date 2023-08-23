@@ -19,7 +19,12 @@ select * FROM chat;
 alter table member modify column
 INSERT INTO chat(pNum, mNum, nick, content) SELECT pNum, mNum, nick, content FROM chat;
 
-INSERT INTO joinMember(pNum, mNum) VALUES(30, 1);
+INSERT INTO joinMember(pNum, mNum) VALUES(497, 2);
+INSERT INTO joinMember(pNum, mNum) VALUES(497, 3);
+INSERT INTO joinMember(pNum, mNum) VALUES(497, 4);
+INSERT INTO joinMember(pNum, mNum) VALUES(497, 5);
+INSERT INTO joinMember(pNum, mNum) VALUES(497, 6);
+
 INSERT INTO member (mId,mPw,mName,mNick,mAge,mGender,mEmail,mAddr)
 VALUES ('admin','admin','admin','관리자',30,'F','admin@Email.com','adminAddr');
 
@@ -28,7 +33,9 @@ VALUES ('id005','qwer','이인','이인',10,'M','admin2@Email.com','adminAddr');
 
 INSERT INTO party (pName,host,sido,sigungu,address,startdate,enddate,maincategory)
 VALUES ('testparty',1,'부산','해운대구','내주소','2023-08-06',CURDATE(),'게임');
+
 alter table chat add column nick VARCHAR(50) not null;
+
 alter table member drop column profileImage;
 alter table member modify column profileImageName varchar(256);
 alter table party modify column partyImage1 varchar(256);
@@ -723,6 +730,18 @@ ADD FOREIGN KEY (cno) REFERENCES freeBoardComment(bno);
 alter table freeBoardComment add column reported char(1) default 'N';
 alter table freeBoard add column reported char(1) default 'N'; 
 ALTER TABLE member CHANGE COLUMN mmame mname VARCHAR(20) not null; 
+
+ALTER TABLE partyboard_comment drop column reported; 
+ALTER TABLE partyboard_comment add column showBoard char(1) default 'Y'; 
+ALTER TABLE partyboard drop column reported; 
+ALTER TABLE partyboard add column showBoard char(1) default 'Y'; 
+
+ALTER TABLE freeBoardComment drop column reported; 
+ALTER TABLE freeBoardComment add column showBoard char(1) default 'Y'; 
+ALTER TABLE freeBoard drop column reported; 
+ALTER TABLE freeBoard add column showBoard char(1) default 'Y'; 
+
+
 show tables;
 desc member;
 select * FROM party;

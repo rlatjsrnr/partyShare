@@ -9,42 +9,72 @@
 <title>Insert title here</title>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <style>
+	#title{
+		margin-left:30%;
+		margin-top:5%;
+	}
 	#imgBox{
 		display:flex;
 		flex-wrap:wrap;
-		width:1000px;
-		height:300px;
-		margin-left:25%;
-		margin-top:10%;
+		flex-direction: column;
+		width:500px;
+		height:750px;
+		margin-left:30%;
+		margin-top:3%;
 	}
 	#imgBox img{
 		border:1px solid black;
 	}
-	#imgBox .preview{
-		width:300px;
-		height:300px;
-	}
-	h1{
-		margin-left:25%;
-		margin-top:10%;
+	
+	.subImage .preview{
+		width:250px;
+		height:250px;
 	}
 	
-	.profile_img_wrap{
+	.mainImage .preview{
+		width: 500px;
+		height: 509px;
+	}
+	.mainImage{
+		width: 500px;
+		height: 509px;
+	}
+	
+	.img_wrap{
 		position: relative;
-		margin:5px auto;
-		width: 300px;
+		margin:5px;
+		width: 500px;
 	}
 	
-	.profile_img_wrap .img_cover{
-		width: 300px;
-		height: 300px;
+	.mainImage .img_cover{
+		width: 500px;
+		height: 509px;
 		border-radius:20px;
 		box-sizing:border-box;
 		position: absolute;
 		text-align: center;
 	}
 	
-	.profile_img_wrap .img_cover > label{
+	.subImage .img_cover{
+		width: 250px;
+		height: 250px;
+		border-radius:20px;
+		box-sizing:border-box;
+		position: absolute;
+		text-align: center;
+	}
+	
+	.mainImage .img_cover > label{
+		display:inline-block;
+		background-image:url('${path}/resources/img/plus_icon.png');
+		background-size:150px;
+		background-repeat:no-repeat;
+		width: 150px;
+		height: 150px;
+		margin-top:35%;
+	}	
+	
+	.subImage .img_cover > label{
 		display:inline-block;
 		background-image:url('${path}/resources/img/plus_icon.png');
 		background-size:150px;
@@ -54,21 +84,18 @@
 		margin-top:25%;	
 	}
 	
-	.profile_img_wrap .img_cover .img_file{
-		display: none;
+	.img_cover label{
+		cursor: pointer;
 	}
-	#submitBtn{
-		position: absolute;
-		bottom: 0;
-		width: 100px;
-		height: 50px;
-		right:0;
+	
+	.mainImage .img_cover .img_file, .subImage .img_cover .img_file{
+		display: none;
 	}
 	
 </style>
 </head>
 <body>
-	<h1>대표 사진 업로드</h1>
+	<h1 id="title">대표 사진 업로드</h1>
 	<form action="createImage" method="POST" enctype="multipart/form-data">
     	<input type="hidden" name="host" value="${loginMember.mnum}"/>
 		<input type="hidden" name="description" value="${vo.description}" />
@@ -85,22 +112,21 @@
 		<input type="hidden" name="pcontext" value="${vo.pcontext}" />
 
 		<div id="imgBox">
-			<div class="profile_img_wrap">
-				<div class="img_cover">
+			<div class="img_wrap mainImage">
+				<div class="img_cover" >
 					<label for="imgInput1"></label>
 					<input type="file" class="img_file" id="imgInput1" name="image1" onchange="readURL(this)" accept=".gif, .jpg, .jpeg, .png" />
 				</div>
-				<img class="preview" />
+				<img class="preview"/>
 			</div>
-			<div class="profile_img_wrap">
+			<div class="img_wrap subImage">
 				<div class="img_cover">
 					<label for="imgInput2"></label>
 					<input type="file" class="img_file" id="imgInput2" name="image2" onchange="readURL(this)" accept=".gif, .jpg, .jpeg, .png" />
-					
 				</div>
 				<img class="preview" />
 			</div>
-			<div class="profile_img_wrap">
+			<div class="img_wrap subImage">
 				<div class="img_cover">
 					<label for="imgInput3"></label>
 					<input type="file" class="img_file" id="imgInput3" name="image3" onchange="readURL(this)" accept=".gif, .jpg, .jpeg, .png" />

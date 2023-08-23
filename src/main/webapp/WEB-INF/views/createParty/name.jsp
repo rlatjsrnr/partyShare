@@ -37,7 +37,7 @@
 	    	<input type="hidden" name="startDate" value="${vo.startDate}" />
 			<input type="hidden" name="endDate" value="${vo.endDate}" />
 			
-			<input type="text" name="pname" id="pname" placeholder="파티 이름은 무엇인가요?"/><br/>
+			<input type="text" name="pname" id="pname" class="reqInput" placeholder="파티 이름은 무엇인가요?"/><br/>
 		</form>
 	</div>
 	

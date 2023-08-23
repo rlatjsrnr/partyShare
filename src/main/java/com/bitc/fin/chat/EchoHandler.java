@@ -1,16 +1,12 @@
 package com.bitc.fin.chat;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -24,12 +20,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/echo")
 public class EchoHandler extends TextWebSocketHandler{
-
+	
 	private static List<WebSocketSession> sessionList = new ArrayList<>();
 
 	ObjectMapper objectMapper = new ObjectMapper();
+	
+	Map<String, List<WebSocketSession>> sessionMap = new HashMap<>();
 	
 	@Autowired
 	ChatService cs;
@@ -45,13 +42,25 @@ public class EchoHandler extends TextWebSocketHandler{
 		
 		String msg = message.getPayload().replace("\"", "");
 		String[] strs = msg.split(",");
-		String pNum = strs[0].substring(strs[0].indexOf(":")+1);
-		String mNum = strs[1].substring(strs[1].indexOf(":")+1);
+		String pnum = strs[0].substring(strs[0].indexOf(":")+1);
+		String mnum = strs[1].substring(strs[1].indexOf(":")+1);
 		String content = strs[2].substring(strs[2].indexOf(":")+1);
 		String path = strs[3].substring(strs[3].indexOf(":")+1);
 		String nick = strs[4].substring(strs[4].indexOf(":")+1, strs[4].length()-1);
 		
-		ChatVO chat = new ChatVO(Integer.parseInt(pNum), Integer.parseInt(mNum), nick, content);
+		ChatVO chat = new ChatVO(Integer.parseInt(pnum), Integer.parseInt(mnum), nick, content);
+		
+		if(content.equals("ENTER")) {
+			if(sessionMap.get(pnum) == null) {
+				List<WebSocketSession> list = new ArrayList<>();
+				sessionMap.put(pnum, list);
+			}
+			if(!sessionMap.get(pnum).contains(session)) {
+				sessionMap.get(pnum).add(session);
+				content = nick+"님이 입장 하셨습니다.";
+			}
+			
+		}
 		
 		String lastChatNum = "";
 		try {
@@ -60,20 +69,24 @@ public class EchoHandler extends TextWebSocketHandler{
 			e1.printStackTrace();
 		}
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("pnum", pNum);
-		map.put("mnum", mNum);
+		map.put("pnum", pnum);
+		map.put("mnum", mnum);
 		map.put("content", content);
 		map.put("path", path);
 		map.put("nick", nick);
 		map.put("cnum", lastChatNum);
+		
 		String json = null;
 		try {
 			json = objectMapper.writeValueAsString(map);
 		} catch (JsonProcessingException e1) {
 			e1.printStackTrace();
 		}
+		if(sessionMap.get(pnum).size() == 0) {
+			return;
+		}
 		
-		for(WebSocketSession sess : sessionList) {
+		for(WebSocketSession sess : sessionMap.get(pnum)) {
 			try {
 				sess.sendMessage(new TextMessage(json));
 			} catch (IOException e) {
@@ -84,6 +97,11 @@ public class EchoHandler extends TextWebSocketHandler{
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+		for(List<WebSocketSession> list : sessionMap.values()) {
+			if(list.contains(session)) {
+				list.remove(session);
+			}
+		}
 		sessionList.remove(session);
 	}
 }
