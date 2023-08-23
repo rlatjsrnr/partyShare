@@ -120,16 +120,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.5/sockjs.min.js"></script>
 </head>
 <body>
-<a href="partyList">List화면으로 이동</a>
+<a href="<c:url value='/home'/>">home으로</a>
+<a href="<c:url value='/party/partyList'/>">List화면으로 이동</a>
 <div id="chat_container">
 	<div class="chatWrap">
 		<div class="content chatcontent">
 			<div id="chatList">
 				<c:forEach var="chat" items="${firstList}" >
 					<!-- 내 채팅일 경우 -->
-					<c:if test="${loginMember.MNum eq chat.MNum}">
-						<li data-no="${chat.CNum}" class="me">
-							<img src="upload/profile${loginMember.profileImageName}"/>
+					<c:if test="${loginMember.mnum eq chat.mnum}">
+						<li class="me" data-no="${chat.cnum}">
+							<img src="<c:url value='/image/printProfileImage?fileName=${loginMember.profileImageName}'/>"/>
 							<div class="me">
 								<p class="myChat">${chat.content}</p> 
 							</div>
@@ -137,11 +138,11 @@
 					</c:if>
 					
 					<!-- 다른사람의 채팅일 경우 -->
-					<c:if test="${loginMember.MNum ne chat.MNum}">
-						<li data-no="${chat.CNum}" id="otherChat">
+					<c:if test="${loginMember.mnum ne chat.mnum}">
+						<li id="otherChat" data-no="${chat.cnum}">
 							<c:forEach var="joinMember" items="${joinMemberList}">
-								<c:if test="${chat.MNum eq joinMember.MNum}">
-									<img src="upload/profile${joinMember.profileImageName}" /><span>${joinMember.MNick}</span>
+								<c:if test="${chat.mnum eq joinMember.mnum}">
+									<img src="<c:url value='/image/printProfileImage?fileName=${joinMember.profileImageName}'/>" /><span>${joinMember.MNick}</span>
 								</c:if>
 							</c:forEach>
 							<div>
@@ -154,7 +155,7 @@
 		</div>
 		<div class="chat-fixK">
 			<div class="fix_btn">
-				<textarea name="msg" id="msgi" rows="3" ></textarea>
+				<textarea name="msg" id="msgi" rows="3"></textarea>
 				<button type="button" id="sendBtn" class="send">보내기</button>
 			</div>
 		</div>
@@ -164,12 +165,12 @@
 	<table border="1">
 		<tr>
 			<th colspan="2">
-				<img src="printPartyImage?fileName=${fn:replace(party.partyImage1, 's_', '')}"/>
+				<img src="<c:url value='/image/printPartyImage?fileName=${fn:replace(party.partyImage1, "s_", "")}'/>"/>
 			</th>
 		</tr>
 		<tr>
 			<td>파티이름</td>
-			<td>${party.PName}</td>
+			<td>${party.pname}</td>
 		</tr>
 		<tr>
 			<td>파티날짜</td>
@@ -181,12 +182,13 @@
 		</tr>
 		<tr>
 			<td>파티소개</td>
-			<td>${party.PContext}</td>
+			<td>${party.pcontext}</td>
 		</tr>
 	</table>
 </div>
 </body>
 <script type="text/javascript">
+	var contextPath = '${pageContext.request.contextPath}';
 	var client;
 	function moveDown(){
 		$(".chatcontent").scrollTop($(".chatcontent")[0].scrollHeight);
@@ -195,16 +197,48 @@
 	$(document).ready(function() {
 		//시작할때 스크롤 내리기
 		$(".chatcontent").scrollTop($(".chatcontent")[0].scrollHeight);
+		
+		// 더이상 가져올 채팅내용이 없으면 true
 		var isEnd = false;
+		
 		var isScrolled = false;
+		
+		var fetchList = function() {
+			if (isEnd == true) {
+				return;
+			}
+
+			var endNo = $("#chatList li").first().data("no");
+			console.log("endNo : " + endNo);
+			$.ajax({
+				url : contextPath+"/chatList?endNo="+endNo+"&pnum=${party.pnum}",
+				type : "GET",
+				dataType : "json",
+				success : function(result) {
+					// 컨트롤러에서 가져온 방명록 리스트는 result.data에 담김
+					var length = result.length;
+					if (length < 10) {
+						isEnd = true;
+					}
+					$.each(result, function(index, vo) {
+						var html = renderList(vo);
+						$("#chatList").prepend(html);
+
+					})
+					var position = $('[data-no='+endNo+']').prev().offset();//위치값
+					document.querySelector('.chatcontent').scrollTo({top : position.top, behavior : 'auto'});
+					isScrolled = false;
+				}
+			});
+		}
 		
 		var renderList = function(vo) {
 			var html = "";
-			
+			endNo = vo.cnum;
 			//내가 보낸 채팅일 경우
-			if(vo.mNum =="${loginMember.MNum}"){
-			html = 	"<li class='me' data-no='"+vo.cNum+"'>"
-					+"<img src='printProfileImage?fileName=${loginMember.profileImageName}'/>"
+			if(vo.mnum =="${loginMember.mnum}"){
+			html = 	"<li class='me' data-no="+endNo+">"
+					+'<img src="<c:url value='/image/printProfileImage?fileName=${loginMember.profileImageName}'/>"/>'
 					+"<div class='me'>"
 					+ "<p class='myChat'>"+vo.content+"</p>"
 					+"</div>"
@@ -212,8 +246,9 @@
 			}
 			//남이 보낸 채팅일 경우
 			else{
-				html = "<li id='otherChat' data-no='"+vo.cNum+"'>"
-					+ "<img src='printProfileImage?fileName="+vo.path+"'/><span>vo.MNick</span>"
+				const mnum = vo.mnum;
+				html = "<li id='otherChat' data-no="+endNo+">"
+					+ "<img src='<c:url value='/image/printProfileImageNum?mnum="+mnum+"'/>'/><span>"+vo.nick+"</span>"
 					+"<div>"
 					+ "<p class='otherChat'>"+vo.content+"</p>"
 					+"</div>"
@@ -222,10 +257,23 @@
 			return html;
 		}
 		
+		$(".chatcontent").scroll(function() {
+			var $window = $(this);
+			var scrollTop = $window.scrollTop();
+			var windowHeight = $window.height();
+			var documentHeight = $(document).height();
+
+			// scrollbar의 thumb가 위의1px까지 도달 하면 리스트를 가져옴
+			if (scrollTop < 1 && isScrolled == false) {
+				isScrolled = true;
+				fetchList();
+			}
+		});
+		
 		$(function() {
 			var messageInput = $('textarea[name="msg"]');
 			var sock = new SockJS("echo");
-			
+
 			sock.onmessage = onMessage;
 			sock.onclose = onClose;
 			
@@ -235,18 +283,19 @@
 					return false;
 				}
 				sock.send(JSON.stringify({
-					pNum : "${party.PNum}",
-					mNum : "${loginMember.MNum}",
+					puum : "${party.pnum}",
+					muum : "${loginMember.mnum}",
 					content : message,
 					path : "${loginMember.profileImageName}",
-					nick : "${loginMember.MNick}"
-				}));
+					nick : "${loginMember.mnick}"
+				})); 
 						
 				messageInput.val('');
 			}
 			
 			function onMessage(msg){
 				var chat = JSON.parse(msg.data);
+				console.log(chat);
 				var html = renderList(chat);
 				$("#chatList").append(html);
 				moveDown();

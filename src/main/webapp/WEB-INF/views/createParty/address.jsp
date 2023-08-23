@@ -7,38 +7,62 @@
 <title>Insert title here</title>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style>
-	#roadAddress,#jibunAddress {
-		width:350px;
+	h1{
+		margin-left:40%;
+	}
+	#addressBox{
+		border:1px black solid;
+		width: 700px;
+		height: 130px;
+		margin-left: 30%;
+		line-height: 30px;
+		margin-top: 3%;
+	}
+	#addressBox form{
+		margin-top:1%;
+		margin-left:5%;
+	}
+	#address{
+		width: 500px;
+	}
+	#detailAddress{
+		width: 310px;
+	}
+	#mapBox{
+		width: 550px;
+		height: 550px;
+		border: 1px lightgrey solid;
+		box-shadow: 1px 1px 1px;
+		margin-left: 35%;
+		margin-top: 3%;
+		text-align: center;
 	}
 </style>
 </head>
 <body>
+	<h1>주소를 입력해주세요</h1>
+	<div id="addressBox">
+		<form action="createAddress" method="post">
+			<input type="hidden" name="host" value="${loginMember.mnum}"/>
+			<input type="hidden" name="description" value="${vo.description}" />
+			<input type="hidden" id="sub" name="category" value="${vo.category}"/>
+			
+			<input type="text" id="postcode" placeholder="우편번호">
+			<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+			<input type="text" name="address" id="address" placeholder="주소"><br>
+			<input type="text" name="detailAddress" id="detailAddress" placeholder="상세주소">
+			<input type="text" id="extraAddress" placeholder="참고항목">
+			<input type="hidden" id="sido" name="sido"/>
+			<input type="hidden" id="sigungu" name="sigungu"/>
+			<input type="hidden" id="lat" name="lat">
+	    	<input type="hidden" id="lng" name="lng">
+		</form>
+	</div>
 	
-	<form action="createAddress" method="post">
-		<input type="hidden" name="host" value="${loginMember.MNum}"/>
-		<input type="hidden" name="pName" value="${vo.PName}" />
-		<input type="hidden" name="startDate" value="${vo.startDate}" />
-		<input type="hidden" name="endDate" value="${vo.endDate}" />
-		<input type="hidden" name="pContext" value='${vo.PContext}' />
-		<input type="hidden" name="description" value="${vo.description}" />
-		<input type="hidden" id="sub" name="category" value="${vo.category}"/>
-		
-		<input type="text" id="postcode" placeholder="우편번호">
-		<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-		<input type="text" name="address" id="address" placeholder="주소"><br>
-		<input type="text" name="detailAddress" id="detailAddress" placeholder="상세주소">
-		<input type="text" id="extraAddress" placeholder="참고항목">
-		<input type="hidden" id="sido" name="sido"/>
-		<input type="hidden" id="sigungu" name="sigungu"/>
-		<button>다음</button>
-		<input type="hidden" id="lat" name="lat">
-    	<input type="hidden" id="lng" name="lng">
-	</form>
+<div id="mapBox">파티 위치
+	<div id="map" style="width:500px;height:500px;margin:3% auto;"></div>
+</div>
 
-<!-- <a href="map">현재지도확인하기</a>
-<p style="margin-top:-12px">
-</p> -->
-<div id="map" style="width:100%;height:350px;"></div>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0534688966ae7b4ea20ffd95099348e8&libraries=services"></script>
@@ -138,5 +162,6 @@
         }).open();
     }
 </script>
+<%@ include file="partyCreateFooter.jsp" %>
 </body>
 </html>

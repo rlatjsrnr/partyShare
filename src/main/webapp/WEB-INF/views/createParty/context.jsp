@@ -5,17 +5,38 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	h1{
+		margin-left:35%;
+	}
+	#contentBox{
+		margin-left: 35%;
+		margin-top: 5%;
+	}
+	
+	
+</style>
 </head>
 <body>
-	<form action="createContext" method="post">
-		<input type="hidden" name="host" value="${loginMember.MNum}"/>
-		<input type="hidden" name="pName" value="${vo.PName}" />
-		<input type="hidden" name="startDate" value="${vo.startDate}" />
-		<input type="hidden" name="endDate" value="${vo.endDate}" />
-		파티 소개<br/>
-		<textarea rows="10" cols="100" name="pContext" id="content"></textarea> <br/>
-		<button>다음</button>		
-	</form>
+	<h1>파티의 자세한 소개를 작성해주세요</h1>
+	<div id="contentBox">
+		<form action="createContext" method="post">
+			<input type="hidden" name="host" value="${loginMember.mnum}"/>
+			<input type="hidden" name="description" value="${vo.description}" />
+			<input type="hidden" name="category" value="${vo.category}" />
+			<input type="hidden" name="address" value="${vo.address}">
+			<input type="hidden" name="sido" value="${vo.sido}">
+			<input type="hidden" name="sigungu" value="${vo.sigungu}">
+			<input type="hidden" name="detailAddress" value="${vo.detailAddress}">
+			<input type="hidden" id="lat" name="lat" value="${mapVO.lat}">
+	    	<input type="hidden" id="lng" name="lng" value="${mapVO.lng}">
+	    	<input type="hidden" name="startDate" value="${vo.startDate}" />
+			<input type="hidden" name="endDate" value="${vo.endDate}" />
+			<input type="hidden" name="pname" value="${vo.pname}" />
+			<textarea rows="10" cols="100" name="pcontext" id="content"></textarea> <br/>
+		</form>	
+	</div>
+	
 	
 	<script src="https://cdn.tiny.cloud/1/3namak8ojm8wwt7yzd2any1fyz4o6twi4gqqxlcgkc6lp22l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 	<script>
@@ -23,8 +44,9 @@
 	let edit_toolbar = "link image forecolor backcolor";
 	
     tinymce.init({
-    	language : "ko_KR",
+      language : "ko_KR",
       selector: '#content',
+      skin: 'oxide-dark',
       width : 600,
       height: 500,
       menubar : false,
@@ -73,5 +95,6 @@
       content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
     });
   </script>
+  <%@ include file="partyCreateFooter.jsp" %>
 </body>
 </html>

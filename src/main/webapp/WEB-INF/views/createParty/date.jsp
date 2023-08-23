@@ -5,13 +5,33 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	#dateBox{
+		margin-left: 35%;
+		margin-top: 10%;
+	}
+	h1{
+		margin-left:38%;
+	}
+</style>
 </head>
 <body>
-	<form action="createDate" method="post">
-		<input type="hidden" name="host" value="${loginMember.MNum}"/>
-		<input type="hidden" name="pName" value="${vo.PName}" /><br/>
-		시작날짜 : <input type="date" name="startDate" required/>	~	끝 날짜 : <input type="date" name="endDate" required/> <br/>
-		<button>다음</button>
-	</form>
+	<h1>날짜를 선택하세요</h1>
+	<div id="dateBox">
+		<form action="createDate" method="post">
+			<input type="hidden" name="host" value="${loginMember.mnum}"/>
+			<input type="hidden" name="description" value="${vo.description}" />
+			<input type="hidden" name="category" value="${vo.category}" />
+			<input type="hidden" name="address" value="${vo.address}">
+			<input type="hidden" name="sido" value="${vo.sido}">
+			<input type="hidden" name="sigungu" value="${vo.sigungu}">
+			<input type="hidden" name="detailAddress" value="${vo.detailAddress}">
+			<input type="hidden" id="lat" name="lat" value="${mapVO.lat}">
+	    	<input type="hidden" id="lng" name="lng" value="${mapVO.lng}">
+			시작날짜 : <input type="date" name="startDate" required/>	~	끝 날짜 : <input type="date" name="endDate" required/> <br/>
+		</form>
+	</div>
+	
+	<%@ include file="partyCreateFooter.jsp" %>
 </body>
 </html>

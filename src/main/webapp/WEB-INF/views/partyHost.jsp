@@ -14,6 +14,7 @@
 </style>
 </head>
 <body>
+<a href="<c:url value='/home'/>">home으로</a>
 <c:if test="${!empty message}">
 	<script>
 		alert('${message}');
@@ -24,15 +25,15 @@
 		<c:if test="${!empty partyJoinMember}">
 			<c:forEach var="list" items="${partyJoinMember}">
 				<tr>
-					<td><img src="printPartyImage?fileName=${list.profileImageName}"/></td>
-					<td style="width: 200px;">${list.MName}</td>
-					<td><a href="partyMemberBan?mNum=${list.MNum}&pNum=7669">강퇴</a></td>
+					<td><img src="<c:url value='/image/printProfileImage?fileName=${list.profileImageName}'/>"/></td>
+					<td style="width: 200px;">${list.mname}</td>
+					<td><a href="<c:url value='/party/partyMemberBan?mnum=${list.mnum}&pnum=${party.pnum}'/>">강퇴</a></td>
 				</tr>
 			</c:forEach>
 		</c:if>
 	</table>
 	<div>
-		<h1><a href="partyFinish?pNum=7669">파티종료</a></h1>
+		<h1><a href="<c:url value='/party/partyFinish?pnum=${party.pnum}'/>">파티종료</a></h1>
 	</div>
 </body>
 </html>

@@ -57,22 +57,30 @@
 		width: 200px;
 		height: 200px;
 	}
+	#pmtr{
+		text-align: center;
+		font-size: 20px;
+	}
+	#pmtr a{
+		text-decoration: none;
+		color:black;
+	}
 </style>
 </head>
 <body>
-<a href="home">home으로</a>
+<a href="<c:url value='/home'/>">home으로</a>
 <!-- 계정정보객체, 파티목록 필요, 파티 이미지들 -->
 	<h1>계정 정보</h1>
 	<div id="profileImage">
-		<img src="printProfileImage?fileName=${loginMember.profileImageName}" ><br/>
+		<img src="<c:url value='/image/printProfileImage?fileName=${loginMember.profileImageName}'/>" ><br/>
 		Profile Image
 	</div>
 	
 	<form action="modify" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="mNum" value="${loginMember.MNum}"/>
-		<input type="hidden" name="mBanCnt" value="${loginMember.MBanCnt}"/>
-		<input type="hidden" name="mJoinCnt" value="${loginMember.MJoinCnt}"/>
-		<input type="hidden" name="mBlackYN" value="${loginMember.MBlackYN}"/>
+		<input type="hidden" name="mnum" value="${loginMember.mnum}"/>
+		<input type="hidden" name="mbanCnt" value="${loginMember.mbanCnt}"/>
+		<input type="hidden" name="mjoinCnt" value="${loginMember.mjoinCnt}"/>
+		<input type="hidden" name="mblackYN" value="${loginMember.mblackYN}"/>
 		<input type="hidden" name="withdraw" value="${loginMember.withdraw}"/>
 		<input type="hidden" name="profileImageName" value="${loginMember.profileImageName}"/>
 	
@@ -84,42 +92,42 @@
 					</tr>
 					<tr>
 						<td>아이디</td>
-						<td><input type="text" name="mId" value="${loginMember.MId}" readonly/></td>
+						<td><input type="text" name="mid" value="${loginMember.mid}" readonly/></td>
 					
 					</tr>
 					<tr>
 						<td>비밀번호</td>
-						<td><input type="password" name="mPw" value="${loginMember.MPw}" required/></td>
+						<td><input type="password" name="mpw" value="${loginMember.mpw}" required/></td>
 					</tr>
 					<tr>
 						<td>비밀번호 확인</td>
-						<td><input type="password" name="passwordChk" value="${loginMember.MPw}" required/></td>
+						<td><input type="password" name="passwordChk" value="${loginMember.mpw}" required/></td>
 					</tr>
 					<tr>
 						<td>이름</td>
-						<td><input type="text" name="mName" value="${loginMember.MName}" required/></td>
+						<td><input type="text" name="mname" value="${loginMember.mname}" required/></td>
 					</tr>
 					<tr>
 						<td>닉네임</td>
-						<td><input type="text" name="mNick" value="${loginMember.MNick}" readonly/></td>
+						<td><input type="text" name="mnick" value="${loginMember.mnick}" readonly/></td>
 					</tr>
 					<tr>
 						<td>나이</td>
-						<td><input type="number" name="mAge" value="${loginMember.MAge}" required/></td>
+						<td><input type="number" name="mage" value="${loginMember.mage}" required/></td>
 					</tr>
 					<tr>
 						<td>email</td>
-						<td><input type="email" name="mEmail" value="${loginMember.MEmail}" readonly/></td>
+						<td><input type="email" name="memail" value="${loginMember.memail}" readonly/></td>
 					</tr>
 					<tr>
 						<td>주소</td>
-						<td><input type="text" name="mAddr" value="${loginMember.MAddr}" required/></td>
+						<td><input type="text" name="maddr" value="${loginMember.maddr}" required/></td>
 					</tr>
 					<tr>
 						<td>성별</td>
 						<td>
-							<input type="radio" name="mGender" value="M" required />남자
-							<input type="radio" name="mGender" value="F" required />여자
+							<input type="radio" name="mgender" value="M" required />남자
+							<input type="radio" name="mgender" value="F" required />여자
 						</td>
 					</tr>
 					<tr>
@@ -145,22 +153,45 @@
 			<c:choose>
 				<c:when test="${!empty joinPartyList}">
 					<c:forEach var="list" items="${joinPartyList}">
-						<tr onclick="partyDetail(${list.PNum});" style="cursor:pointer;">
+						<tr onclick="partyDetail(${list.pnum});" style="cursor:pointer;">
 							<td rowspan="3">
-								<img id="partyImg" src="printPartyImage?fileName=${list.partyImage1}" />
+								<img id="partyImg" src="<c:url value='/image/printPartyImage?fileName=${list.partyImage1}'/>" />
 							</td>	
 							<td>파티이름 : </td>
-							<td>${list.PName}</td>	
+							<td>${list.pname}</td>	
 						</tr>
-						<tr onclick="partyDetail(${list.PNum});" style="cursor:pointer;">
+						<tr onclick="partyDetail(${list.pnum});" style="cursor:pointer;">
 							<td>파티날짜 : </td>
 							<td>${list.formatStartDate} ~ ${list.formatEndDate}</td>
 						</tr>
-						<tr onclick="partyDetail(${list.PNum});" style="cursor:pointer;">
+						<tr onclick="partyDetail(${list.pnum});" style="cursor:pointer;">
 							<td>파티장소 : </td>
 							<td>${list.address} ${list.detailAddress}</td>
 						</tr>
 					</c:forEach>
+					<tr id="pmtr">
+						<td colspan="3">
+							<!-- PageMaker == pm -->
+							<c:if test="${pm.prev}">
+								<a href="<c:url value='/member/profileModify${pm.mkQueryStr(pm.startPage-1)}'/>">&laquo;</a>
+							</c:if>
+							
+							<c:forEach var="i" begin="${pm.startPage}" end="${pm.endPage}">
+								<c:choose>
+									<c:when test="${i eq pm.cri.page}">
+										<a style="color:red;" href="<c:url value='/member/profileModify${pm.mkQueryStr(i)}'/>">[${i}]</a>
+									</c:when>
+									<c:otherwise>
+										<a href="<c:url value='/member/profileModify${pm.mkQueryStr(i)}'/>">[${i}]</a>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+
+							<c:if test="${pm.next}">
+								<a href="<c:url value='/member/profileModify${pm.mkQueryStr(pm.endPage+1)}'/>">&raquo;</a>
+							</c:if>
+						</td>
+					</tr>
 						<tr>
 							<td colspan="3" style="text-align: center;"><a href="" id="reportBtn">신고하기</a></td>
 						</tr>
@@ -191,8 +222,10 @@
 	  }
 	}
 	
-	function partyDetail(pNum){
-		location.href='partyDetail?pNum='+pNum;
+	var contextPath = '${pageContext.request.contextPath}';
+	
+	function partyDetail(pnum){
+		location.href=''+contextPath+'/party/partyDetail?pnum='+pnum;
 	}
 </script>
 </body>

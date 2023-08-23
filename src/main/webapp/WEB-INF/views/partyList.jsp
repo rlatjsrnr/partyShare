@@ -8,9 +8,11 @@
 <head>
 <meta charset="UTF-8">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
 
 <title>Insert title here</title>
 <style>
+
 	#partyListContainer{
 		width: 90%;
 		margin-left: 10%;
@@ -58,6 +60,7 @@
 	}
 	
 </style>
+
 </head>
 <body>
 <c:if test="${!empty message}">
@@ -66,13 +69,13 @@
 	</script>
 </c:if>
 <!-- partyList 필요 -->
-<a href="createName">파티등록</a><br/>
-<a href="home">홈으로</a>
+<a href="<c:url value='/party/createParty'/>">파티등록</a><br/>
+<a href="<c:url value='/home'/>">홈으로</a>
 <div id="mapBtn">
 	<a href="#">지도보기</a>
 </div>
 <hr/>
-	<div id="partyListContainer">
+	<div id="partyListContainer" >
 		
 		<ul id="partys">
 		
@@ -81,13 +84,15 @@
 
 	<script>
 	
+	var contextPath = '${pageContext.request.contextPath}';
 	var page = 1;
 	
 	listPage(page);
 	
 	function listPage(page){
-		let url = "partyList/"+page;
+		let url = contextPath+"/party/partyList/"+page;
 		$.getJSON(url,function(data){
+			console.log(data.list);
 			printList(data.list);
 		});
 	}
@@ -95,18 +100,18 @@
 	function printList(list){
 		let str = "";
 		$(list).each(function(){
-			let pName = this.pname;
+			let pname = this.pname;
 			let address = this.address;
 			let date = this.formatStartDate +"~"+ this.formatEndDate;		
-			let pNum = this.pnum;
+			let pnum = this.pnum;
 			let path = this.partyImage1;
 			let detailAddress = this.detailAddress;
 			
-			str += "<li>";
+			str += '<li>';
 			// wishList 받아서 fullHeart.png로 출력
-			str += "<img src='resources/img/emptyHeart.png' class='likeBtn'/>"
-			str += "<img src='printPartyImage?fileName="+path+"' class='partyImg' onclick='partyDetail("+pNum+");' /><br/>";
-			str += "파티명 : "+pName+"<br/>";
+			str += "<img src='"+contextPath+"/resources/img/emptyHeart.png' class='likeBtn'/>"
+			str += "<img src='"+contextPath+"/image/printPartyImage?fileName="+path+"' class='partyImg' onclick='partyDetail("+pnum+");' /><br/>";
+			str += "파티명 : "+pname+"<br/>";
 			str += "주소 : "+address+" "+detailAddress+"<br/>";
 			str += "날짜 : "+date;
 			str += "</li>";
@@ -114,17 +119,17 @@
 		$("#partys").append(str);
 	}
 	
-	function partyDetail(pNum){
-		location.href="partyDetail?pNum="+pNum;
+	function partyDetail(pnum){
+		location.href=contextPath+'/party/partyDetail?pnum='+pnum;
 	}
 	
 	// wishList
 	$("#partys").on("click", "li .likeBtn", function(){
 		let likeImg = $(this).attr("src");
-		if(likeImg == 'resources/img/emptyHeart.png'){
-			$(this).attr("src", "resources/img/fullHeart.png");
+		if(likeImg == contextPath+'/resources/img/emptyHeart.png'){
+			$(this).attr("src", ""+contextPath+"/resources/img/fullHeart.png");
 		}else{
-			$(this).attr("src", "resources/img/emptyHeart.png");
+			$(this).attr("src", ""+contextPath+"/resources/img/emptyHeart.png");
 		}
 	});
 	
@@ -143,38 +148,6 @@
 		}	
 	});
 	
-	/*
-	function printPage(pm){
-		let str = "";
-		if(pm.prev){
-			str += "<li><a href='"+(pm.startPage-1)+"'> << </a></li>";
-		}
-		
-		for(let i = pm.startPage; i<=pm.endPage; i++){
-			if(pm.cri.page == i){
-				str += "<li><a href='"+i+"' class='active'>"+i+"</a></li>";
-			}else{
-				str += "<li><a href='"+i+"'>"+i+"</a></li>";
-			}
-		}
-		
-		if(pm.next){
-			str += "<li><a href='"+(pm.endPage+1)+"'> >> </a></li>";
-		}
-		
-		
-		$("#pagination").html(str);
-	}
-	*/
-	/*
-	$("#pagination").on("click", "li a",function(e){
-		e.preventDefault();
-		let commentPage = $(this).attr("href");
-		page = commentPage;
-		listPage(page);
-	});
-	*/
-	
-	</script>
+    </script>
 </body>
 </html>
